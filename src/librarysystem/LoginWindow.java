@@ -19,6 +19,10 @@ import javax.swing.JOptionPane;
 import business.ControllerInterface;
 
 import business.SystemController;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFacade;
+import dataaccess.User;
+import java.util.Map;
 
 
 public class LoginWindow extends JFrame implements LibWindow {
@@ -186,8 +190,27 @@ public class LoginWindow extends JFrame implements LibWindow {
     	
     	private void addLoginButtonListener(JButton butn) {
     		butn.addActionListener(evt -> {
-    			JOptionPane.showMessageDialog(this,"Successful Login");
-    				
+    			String userId = username.getText();
+    			String userPass = password.getText();
+    			if(userId == null || userId.isBlank() || userPass == null || userPass.isBlank()) {
+    				JOptionPane.showMessageDialog(this,"Invalid username or password", "", JOptionPane.ERROR_MESSAGE);
+    				return;
+    			}
+    			DataAccess da = new DataAccessFacade();
+    			Map<String, User> users = da.readUserMap();
+    			if(!users.containsKey(userId)) {
+    				JOptionPane.showMessageDialog(this,"Invalid username", "", JOptionPane.ERROR_MESSAGE);
+    				return;
+    			}
+    			User user = users.get(userId);
+    			if(!userPass.equals(user.getPassword())) {
+    				JOptionPane.showMessageDialog(this,"Invalid password", "", JOptionPane.ERROR_MESSAGE);
+    				return;
+    			}
+    			LibrarySystem.INSTANCE.setLoggedInUser(user);
+    			LibrarySystem.INSTANCE.refreshMenuByUserRole();
+    			LibrarySystem.hideAllWindows();
+    			LibrarySystem.INSTANCE.setVisible(true);    				
     		});
     	}
 	

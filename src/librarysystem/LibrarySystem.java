@@ -14,9 +14,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 import business.ControllerInterface;
 import business.SystemController;
+import dataaccess.User;
 
 
 public class LibrarySystem extends JFrame implements LibWindow {
@@ -25,9 +28,22 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	JPanel mainPanel;
 	JMenuBar menuBar;
     JMenu options;
-    JMenuItem login, allBookIds, allMemberIds; 
+    JMenuItem login, logout;
+    JMenuItem addBook, addMember, checkOutBook;
+    JSeparator separator;
     String pathToImage;
-    private boolean isInitialized = false;
+    
+    private User loggedInUser;
+    public User getLoggedInUser() {
+		return loggedInUser;
+	}
+
+	public void setLoggedInUser(User loggedInUser) {
+		this.loggedInUser = loggedInUser;
+	}
+
+
+	private boolean isInitialized = false;
     
     private static LibWindow[] allWindows = { 
     	LibrarySystem.INSTANCE,
@@ -76,7 +92,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		addMenuItems();
 		setJMenuBar(menuBar);		
     }
-    
+    /*
     private void addMenuItems() {
        options = new JMenu("Options");  
  	   menuBar.add(options);
@@ -90,6 +106,62 @@ public class LibrarySystem extends JFrame implements LibWindow {
  	   options.add(allBookIds);
  	   options.add(allMemberIds);
     }
+    */
+    
+    
+    
+    private void addMenuItems() {
+       options = new JMenu("Options");  
+       menuBar.add(options);
+       login = new JMenuItem("Login"); 
+  	   login.addActionListener(new LoginListener());
+	   options.add(login);
+	   addBook = new JMenuItem("Add Book"); 
+	   addMember = new JMenuItem("Add member"); 
+	   checkOutBook = new JMenuItem("Checkout book");
+	   options.add(addBook);
+	   options.add(addMember);
+	   options.add(checkOutBook);	   
+	   logout = new JMenuItem("Logout"); 
+  	   logout.addActionListener(new LogoutListener());
+  	   separator = new JSeparator(SwingConstants.HORIZONTAL);
+  	   options.add(separator);
+	   options.add(logout);	   
+	  
+	   refreshMenuByUserRole();	   
+     }
+    
+    public void refreshMenuByUserRole() {
+    	if(loggedInUser != null) {	
+    		separator.setVisible(true);
+    		logout.setVisible(true);
+	 		login.setVisible(false);
+	 		checkOutBook.setVisible(false);
+		    addMember.setVisible(false);
+		    addBook.setVisible(false);
+		    dataaccess.Auth auth = loggedInUser.getAuthorization();
+	 		switch (auth) {
+	 			case LIBRARIAN: {
+	 				checkOutBook.setVisible(true);
+	 		        break;
+	 			}
+	 		    case ADMIN:
+	 		        addMember.setVisible(true);
+	 		        addBook.setVisible(true);
+	 		        break;
+				default:
+					break;
+			 }
+	 		   
+ 	   } else { 		 
+ 		   login.setVisible(true);
+ 		   separator.setVisible(false);
+ 		   checkOutBook.setVisible(false);
+ 	       addMember.setVisible(false);
+ 	       addBook.setVisible(false);
+ 	       logout.setVisible(false);
+ 	   }
+    }
     
     class LoginListener implements ActionListener {
 
@@ -100,6 +172,16 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			Util.centerFrameOnDesktop(LoginWindow.INSTANCE);
 			LoginWindow.INSTANCE.setVisible(true);
 			
+		}
+    	
+    }
+    
+    class LogoutListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			loggedInUser = null;
+			refreshMenuByUserRole();			
 		}
     	
     }
