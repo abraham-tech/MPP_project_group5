@@ -50,7 +50,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		LoginWindow.INSTANCE,
 		AllMemberIdsWindow.INSTANCE,	
 		AllBookIdsWindow.INSTANCE,
-		AddNewMemberWindow.INSTANCE,
 	};
     	
 	public static void hideAllWindows() {		
@@ -121,7 +120,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	   addMember = new JMenuItem("Add member");
 	   allMemberIds = new JMenuItem("All Member Ids");
  	   allMemberIds.addActionListener(new AllMemberIdsListener());
-	   addMember.addActionListener(new AddNewMemberListener());
 	   checkOutBook = new JMenuItem("Checkout book");
 	   options.add(addBook);
 	   options.add(addMember);
@@ -244,21 +242,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			AllMemberIdsWindow.INSTANCE.setVisible(true);
 			
 			
-		}
-    	
-    }
-    
-    class AddNewMemberListener implements ActionListener {
-
-    	@Override
-		public void actionPerformed(ActionEvent e) {
-			LibrarySystem.hideAllWindows();
-			AddNewMemberWindow.INSTANCE.init();
-			AddNewMemberWindow.INSTANCE.pack();
-			AddNewMemberWindow.INSTANCE.setVisible(true);
-			LibrarySystem.hideAllWindows();
-			Util.centerFrameOnDesktop(AddNewMemberWindow.INSTANCE);
-			AddNewMemberWindow.INSTANCE.setVisible(true);
 		}
     	
     }
