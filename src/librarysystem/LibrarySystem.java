@@ -29,7 +29,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	JMenuBar menuBar;
     JMenu options;
     JMenuItem login, logout;
-    JMenuItem addBook, addMember, checkOutBook;
+    JMenuItem addBook, addMember, checkOutBook, allMemberIds;
     JSeparator separator;
     String pathToImage;
     
@@ -49,7 +49,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	LibrarySystem.INSTANCE,
 		LoginWindow.INSTANCE,
 		AllMemberIdsWindow.INSTANCE,	
-		AllBookIdsWindow.INSTANCE
+		AllBookIdsWindow.INSTANCE,
+		AddNewMemberWindow.INSTANCE,
 	};
     	
 	public static void hideAllWindows() {		
@@ -79,7 +80,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     
     private void setPathToImage() {
     	String currDirectory = System.getProperty("user.dir");
-    	pathToImage = currDirectory+"\\src\\librarysystem\\library.jpg";
+    	pathToImage = currDirectory+"/src/librarysystem/library.jpg";
     }
     
     private void insertSplashImage() {
@@ -117,11 +118,15 @@ public class LibrarySystem extends JFrame implements LibWindow {
   	   login.addActionListener(new LoginListener());
 	   options.add(login);
 	   addBook = new JMenuItem("Add Book"); 
-	   addMember = new JMenuItem("Add member"); 
+	   addMember = new JMenuItem("Add member");
+	   allMemberIds = new JMenuItem("All Member Ids");
+ 	   allMemberIds.addActionListener(new AllMemberIdsListener());
+	   addMember.addActionListener(new AddNewMemberListener());
 	   checkOutBook = new JMenuItem("Checkout book");
 	   options.add(addBook);
 	   options.add(addMember);
-	   options.add(checkOutBook);	   
+	   options.add(checkOutBook);
+	   options.add(allMemberIds);
 	   logout = new JMenuItem("Logout"); 
   	   logout.addActionListener(new LogoutListener());
   	   separator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -139,6 +144,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	 		checkOutBook.setVisible(false);
 		    addMember.setVisible(false);
 		    addBook.setVisible(false);
+		    allMemberIds.setVisible(false);
 		    dataaccess.Auth auth = loggedInUser.getAuthorization();
 	 		switch (auth) {
 	 			case LIBRARIAN: {
@@ -148,6 +154,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	 		    case ADMIN:
 	 		        addMember.setVisible(true);
 	 		        addBook.setVisible(true);
+	 		        allMemberIds.setVisible(true);
 	 		        break;
 				default:
 					break;
@@ -160,6 +167,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
  	       addMember.setVisible(false);
  	       addBook.setVisible(false);
  	       logout.setVisible(false);
+ 	       allMemberIds.setVisible(false);
  	   }
     }
     
@@ -236,6 +244,21 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			AllMemberIdsWindow.INSTANCE.setVisible(true);
 			
 			
+		}
+    	
+    }
+    
+    class AddNewMemberListener implements ActionListener {
+
+    	@Override
+		public void actionPerformed(ActionEvent e) {
+			LibrarySystem.hideAllWindows();
+			AddNewMemberWindow.INSTANCE.init();
+			AddNewMemberWindow.INSTANCE.pack();
+			AddNewMemberWindow.INSTANCE.setVisible(true);
+			LibrarySystem.hideAllWindows();
+			Util.centerFrameOnDesktop(AddNewMemberWindow.INSTANCE);
+			AddNewMemberWindow.INSTANCE.setVisible(true);
 		}
     	
     }
