@@ -25,10 +25,9 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.User;
 
-
 public class LibrarySystem extends JFrame implements LibWindow {
 	ControllerInterface ci = new SystemController();
-	public final static LibrarySystem INSTANCE =new LibrarySystem();
+	public final static LibrarySystem INSTANCE = new LibrarySystem();
 	JPanel mainPanel;
 	JPanel menuPanel;
 	JPanel contentPanel;
@@ -50,15 +49,17 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	public void setLoggedInUser(User loggedInUser) {
 		this.loggedInUser = loggedInUser;
 	}
-    
-    private static LibWindow[] allWindows = { 
-    	LibrarySystem.INSTANCE,
-		LoginWindow.INSTANCE,
+
+	private boolean isInitialized = false;
+
+	private static LibWindow[] allWindows = {
+			LibrarySystem.INSTANCE,
+			LoginWindow.INSTANCE,
 	};
-    	
-	public static void hideAllWindows() {		
-		for(LibWindow frame: allWindows) {
-			frame.setVisible(false);			
+
+	public static void hideAllWindows() {
+		for (LibWindow frame : allWindows) {
+			frame.setVisible(false);
 		}
 	}
      
@@ -75,10 +76,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
     
     private void formatContentPane() {
 		menuPanel = new JPanel();
-		menuPanel.setLayout(new GridLayout(15, 1) );
+		menuPanel.setLayout(new GridLayout(15, 1));
 		menuPanel.setBackground(Color.LIGHT_GRAY);
 		contentPanel = new JPanel();
-		contentPanel.setLayout(new GridLayout(1,1));
+		contentPanel.setLayout(new GridLayout(1, 1));
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
 	    splitPane.setDividerLocation(100);
 		getContentPane().add(splitPane);
@@ -91,29 +92,31 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	// for windows use this 
     	// pathToImage = currDirectory+"\\src\\librarysystem\\ßlibrary.jpg";
     }
-    
-    private void insertSplashImage() {
-        ImageIcon image = new ImageIcon(pathToImage);
-        contentPanel.add(new JLabel(image));	
-    }
-        
-    
-    public void initLoginForm() {
-    	clearMenu();
-    	JLabel loginLabel = new JLabel("Sign In:");
+
+	private void insertSplashImage() {
+		ImageIcon image = new ImageIcon(pathToImage);
+		contentPanel.add(new JLabel(image));
+	}
+
+
+	public void initLoginForm() {
+		clearMenu();
+		JLabel loginLabel = new JLabel("Sign In:");
+		splitPane.setDividerLocation(100);
+		getContentPane().add(splitPane);
 		Util.adjustLabelFont(loginLabel, Color.BLUE.darker(), true);
 		menuPanel.add(loginLabel);		
 		JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
+		s.setOrientation(SwingConstants.HORIZONTAL);
+		menuPanel.add(s);
 		username = new JTextField(45);
-		username.setMaximumSize( username.getPreferredSize() );
+		username.setMaximumSize(username.getPreferredSize());
 		JLabel uLabel = new JLabel("Username:");
 		uLabel.setFont(Util.makeSmallFont(uLabel.getFont()));
 		menuPanel.add(uLabel);
 		menuPanel.add(username);
 		password = new JTextField(45);
-		password.setMaximumSize( password.getPreferredSize() );
+		password.setMaximumSize(password.getPreferredSize());
 		JLabel pLabel = new JLabel("Password:");
 		pLabel.setFont(Util.makeSmallFont(pLabel.getFont()));
 		menuPanel.add(pLabel);
@@ -139,69 +142,62 @@ public class LibrarySystem extends JFrame implements LibWindow {
     public void initAdminMenu() {
     	clearMenu();
 		booksButton = new JButton("Books");
-		usersButton = new JButton("Users");
-		
+		usersButton = new JButton("Users");		
 		menuPanel.add(booksButton);
 		menuPanel.add(usersButton);
-		JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
         addLogoutButton();
     }
-    
-    public void initLibrarianMenu() {
-    	clearMenu();
+
+	public void initLibrarianMenu() {
+		clearMenu();
 		JButton checkoutButton = new JButton("Checkout");
 		menuPanel.add(checkoutButton);
-		JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
         addLogoutButton();
     }
-    
-    public void initBothMenu() {
-    	clearMenu();
-    	booksButton = new JButton("Books");
+
+	public void initBothMenu() {
+		clearMenu();
+		booksButton = new JButton("Books");
 		usersButton = new JButton("Users");
 		checkoutButton = new JButton("Checkout");
 		menuPanel.add(booksButton);
 		menuPanel.add(usersButton);
 		menuPanel.add(checkoutButton);
-		JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
         addLogoutButton();
     }
     
     private void addLogoutButton() {
     	logoutButton = new JButton("Sign Out");
 		logoutButton.addActionListener(new LogoutListener());
+		JSeparator s = new JSeparator();
+		s.setOrientation(SwingConstants.HORIZONTAL);
+		menuPanel.add(s);
 		menuPanel.add(logoutButton);
-    }
-    
-    private void addLoginButtonListener(JButton butn) {
+	}
+
+	private void addLoginButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
 			String userId = username.getText();
 			String userPass = password.getText();
-			if(userId == null || userId.isBlank() || userPass == null || userPass.isBlank()) {
-				JOptionPane.showMessageDialog(this,"Invalid username or password", "", JOptionPane.ERROR_MESSAGE);
+			if (userId == null || userId.isBlank() || userPass == null || userPass.isBlank()) {
+				JOptionPane.showMessageDialog(this, "Invalid username or password", "", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			DataAccess da = new DataAccessFacade();
 			Map<String, User> users = da.readUserMap();
-			if(!users.containsKey(userId)) {
-				JOptionPane.showMessageDialog(this,"Invalid username", "", JOptionPane.ERROR_MESSAGE);
+			if (!users.containsKey(userId)) {
+				JOptionPane.showMessageDialog(this, "Invalid username", "", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			User user = users.get(userId);
-			if(!userPass.equals(user.getPassword())) {
-				JOptionPane.showMessageDialog(this,"Invalid password", "", JOptionPane.ERROR_MESSAGE);
+			if (!userPass.equals(user.getPassword())) {
+				JOptionPane.showMessageDialog(this, "Invalid password", "", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			LibrarySystem.INSTANCE.setLoggedInUser(user);
-			if(user.getAuthorization() == Auth.ADMIN) {
+			if (user.getAuthorization() == Auth.ADMIN) {
 				initAdminMenu();
-			} else if(user.getAuthorization() == Auth.LIBRARIAN) {
+			} else if (user.getAuthorization() == Auth.LIBRARIAN) {
 				initLibrarianMenu();
 			} else if (user.getAuthorization() == Auth.BOTH) {
 				initBothMenu();
@@ -216,26 +212,30 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			}
 			if (booksButton != null) {
 				booksButton.addActionListener((evt1) -> {
-					contentPanel = new JPanel();
-					insertSplashImage();
-					splitPane.setRightComponent(contentPanel);
+					if (!(contentPanel instanceof ListLibraryBookWindow)) {
+						contentPanel = new ListLibraryBookWindow();
+						splitPane.setRightComponent(contentPanel);
+					}
+					// contentPanel = new JPanel();
+					// insertSplashImage();
+					// splitPane.setRightComponent(contentPanel);
 				});
 			}
 		});
 	}  
     
-    class LogoutListener implements ActionListener {
 
+	class LogoutListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			loggedInUser = null;
 			clearMenu();
 			clearContentPanel();
 			insertSplashImage();
-			initLoginForm();			
+			initLoginForm();	
 		}
-    	
-    }
+
+	}
 
 	@Override
 	public boolean isInitialized() {
@@ -246,7 +246,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	@Override
 	public void isInitialized(boolean val) {
 		// TODO Auto-generated method stub
-		
+
 	}
-    
+
 }
