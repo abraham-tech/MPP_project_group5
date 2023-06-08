@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -120,7 +121,7 @@ public class ListLibraryMemberWindow extends JPanel {
 		panel_3.add(btnUpdate);
 		
 		middlePanel = new JPanel();
-		middlePanel.setBounds(25, 5, 721, 219);
+		middlePanel.setBounds(5, 5, 460, 219);
 		middlePanel.setLayout(new GridLayout(0, 2, 0, 0));
 		lblMemberId = new JLabel("ID:");
 		middlePanel.add(lblMemberId);
@@ -182,7 +183,7 @@ public class ListLibraryMemberWindow extends JPanel {
 		panel_2.add(middlePanel);
 		
 		panel_4 = new JPanel();
-		panel_4.setBounds(54, 282, 631, 275);
+		panel_4.setBounds(5, 282, 580, 275);
 		panel_2.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
 		
@@ -271,7 +272,7 @@ public class ListLibraryMemberWindow extends JPanel {
 			Address newAddress = new Address(streetString, cityString, stateString, zipString);
 			LibraryMember member = new LibraryMember(idString, firstNameString, lastNameString, telephoneString, newAddress); 
 			ci.saveMember(member);
-			JOptionPane.showMessageDialog(frame,"Add member successfully", "", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame,"Add member successfully", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(System.getProperty("user.dir")+"/src/librarysystem/success.png"));
 			Object[] objects = {member.getMemberId(), member.getFirstName(), member.getLastName(), member.getTelephone(), member.getAddress()};
 			model.addRow(objects);
 			
@@ -295,7 +296,7 @@ public class ListLibraryMemberWindow extends JPanel {
 			Address newAddress = new Address(streetString, cityString, stateString, zipString);
 			LibraryMember member = new LibraryMember(idString, firstNameString, lastNameString, telephoneString, newAddress); 
 			ci.saveMember(member);
-			JOptionPane.showMessageDialog(frame,"Update member successfully", "", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame,"Update member successfully", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(System.getProperty("user.dir")+"/src/librarysystem/success.png"));
 			model.setValueAt(member.getMemberId(), selectedRow, 0);
 			model.setValueAt(member.getFirstName(), selectedRow, 1);
 			model.setValueAt(member.getLastName(), selectedRow, 2);

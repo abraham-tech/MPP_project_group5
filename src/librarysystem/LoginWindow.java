@@ -209,7 +209,6 @@ public class LoginWindow extends JFrame implements LibWindow {
     			}
     			System.out.println(user.getAuthorization());
     			LibrarySystem.INSTANCE.setLoggedInUser(user);
-    			LibrarySystem.INSTANCE.refreshMenuByUserRole();
     			LibrarySystem.hideAllWindows();
     			LibrarySystem.INSTANCE.setVisible(true);    				
     		});
