@@ -33,9 +33,11 @@ public class TestData {
 
 		memberMap.values().forEach(member -> {
 			BookCopy copy = td.allBooks.get(0).getCopy(1);
-			int maxCheckoutLength = copy.getBook().getMaxCheckoutLength();
-			member.checkout(copy, LocalDate.now(), LocalDate.now().plusDays(maxCheckoutLength));
-			da.saveNewMember(member);
+			if(copy != null) {
+				int maxCheckoutLength = copy.getBook().getMaxCheckoutLength();
+				member.checkout(copy, LocalDate.now(), LocalDate.now().plusDays(maxCheckoutLength));
+				da.saveNewMember(member);
+			}
 		});
 	}
 	///create books

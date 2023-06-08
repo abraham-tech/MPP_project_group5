@@ -34,6 +34,7 @@ public class Main {
         Collection<LibraryMember> members = da.readMemberMap().values();
         List<CheckoutRecord> records = members.stream()
                 .map(LibraryMember::getCheckoutRecords)
+                .filter(List::isEmpty)
                 .flatMap(List::stream)
                 .toList();
 
