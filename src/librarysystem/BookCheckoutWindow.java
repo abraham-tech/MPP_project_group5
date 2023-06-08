@@ -46,7 +46,7 @@ public class BookCheckoutWindow extends JPanel {
         errorLabel.setText("Hello World");
         panel.add(lblNewLabel);
 
-        Object[] columnsObjects = {"CHECKOUT DATE", "DUE DATE", "ISBN", "BOOK TITLE", "BORROWER", "TEL"};
+        Object[] columnsObjects = {"CHECKOUT DATE", "DUE DATE", "ISBN", "BOOK TITLE", "BORROWER", "MEMBER ID", "TEL"};
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(columnsObjects);
 
@@ -79,7 +79,7 @@ public class BookCheckoutWindow extends JPanel {
         checkoutBookButton.setHorizontalAlignment(SwingConstants.RIGHT);
 
         JPanel middlePanel = new JPanel();
-        middlePanel.setBounds(25, 5, 721, 219);
+        middlePanel.setBounds(0, 5, 500, 219);
         middlePanel.setLayout(new GridLayout(0, 2, 0, 0));
         JLabel memberIdLabel = new JLabel("Member ID:");
         middlePanel.add(memberIdLabel);
@@ -99,7 +99,7 @@ public class BookCheckoutWindow extends JPanel {
         panel_2.add(middlePanel);
 
         JPanel panel_4 = new JPanel();
-        panel_4.setBounds(54, 282, 631, 275);
+        panel_4.setBounds(0, 282, 731, 275);
         panel_2.add(panel_4);
         panel_4.setLayout(new BorderLayout(0, 0));
 
@@ -128,7 +128,8 @@ public class BookCheckoutWindow extends JPanel {
             try {
                 ci.checkBook(memberId, bookIsbn);
                 clearText();
-                JOptionPane.showMessageDialog(this, "Book successfully checked out", "", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Book successfully checked out", "", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(System.getProperty("user.dir")+"/src/librarysystem/success.png"));
+            
             } catch (LibrarySystemException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "", JOptionPane.ERROR_MESSAGE);
             }

@@ -139,6 +139,13 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	public void initLibrarianMenu() {
 		clearMenu();
 		JButton checkoutButton = new JButton("Checkout");
+		checkoutButton = new JButton("Checkout");
+		checkoutButton.addActionListener(e -> {
+			if (!(contentPanel instanceof BookCheckoutWindow)) {
+				contentPanel = new BookCheckoutWindow();
+				splitPane.setRightComponent(contentPanel);
+			}
+		});
 		menuPanel.add(checkoutButton);
         addLogoutButton();
     }
