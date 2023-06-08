@@ -313,6 +313,9 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		public void actionPerformed(ActionEvent e) {
 			loggedInUser = null;
 			initLoginForm();
+			contentPanel = new JPanel();
+			insertSplashImage();
+			splitPane.setRightComponent(contentPanel);
 		}
 
 	}
