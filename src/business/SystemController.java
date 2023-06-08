@@ -86,4 +86,9 @@ public class SystemController implements ControllerInterface {
 		return null;
 	}
 
+	@Override
+	public void saveBook(Book book) {
+		da.saveBook(book);
+	}
+
 }

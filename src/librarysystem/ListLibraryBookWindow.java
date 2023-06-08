@@ -23,6 +23,9 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import business.Book;
 import business.ControllerInterface;
 import business.SystemController;
@@ -34,16 +37,37 @@ public class ListLibraryBookWindow extends JPanel {
 	private JTextField txtAvailability;
 	private JLabel lblTitle;
 	private JTextField txtTitle;
+	private JLabel lblAuthors;
 	private JButton btnAdd;
+	private JButton btnCopy;
 	private JPanel middlePanel;
 	private JFrame frame;
 	private JTable table;
 	private ControllerInterface ci = new SystemController();
 	private JPanel panel_4;
+	private List<String> defaultList = new ArrayList<>();
+	private JList<String> mainList;
+	private JScrollPane mainScroll;
+	private DefaultListModel<String> listModel = new DefaultListModel<String>();
+	private JButton removeSelectedButton, addItemButton;
+	private JTextField addField;
+
 	private int selectedRow = -1;
 
 	public ListLibraryBookWindow() {
 		initialize();
+	}
+
+	private JList<String> createJList() {
+		JList<String> ret = new JList<String>(listModel);
+		ret.setVisibleRowCount(4);
+		return ret;
+	}
+
+	private void initializeDefaultList() {
+		defaultList.add("Red");
+		defaultList.add("Blue");
+		defaultList.add("Yellow");
 	}
 
 	private void initialize() {
@@ -54,13 +78,13 @@ public class ListLibraryBookWindow extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("Book shelf");
 		panel.add(lblNewLabel);
-		Object[] columnsObjects = { "ISBN", "Title", "Maximum checkout", "Copies" };
+		Object[] columnsObjects = { "ISBN", "Title", "Maximum checkout", "Copies", "Authors" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columnsObjects);
 		Collection<Book> books = ci.allBooks();
 		for (Book book : books) {
 			Object[] objects = { book.getIsbn(), book.getTitle(), book.getMaxCheckoutLength(),
-					book.getCopies().length };
+					book.getCopies().length, book.getAuthors().toString() };
 			model.addRow(objects);
 		}
 
@@ -73,9 +97,13 @@ public class ListLibraryBookWindow extends JPanel {
 		JPanel panel_3 = new JPanel();
 		panel_3.setBounds(154, 231, 430, 39);
 
-		JButton btnAdd = new JButton("ADD");
+		btnAdd = new JButton("ADD");
 		panel_3.add(btnAdd);
 		btnAdd.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		btnCopy = new JButton("COPY");
+		panel_3.add(btnCopy);
+		btnCopy.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		JButton btnDelete = new JButton("DELETE");
 		panel_3.add(btnDelete);
@@ -108,6 +136,15 @@ public class ListLibraryBookWindow extends JPanel {
 		middlePanel.add(txtAvailability);
 		txtAvailability.setColumns(10);
 
+		// middlePanel = new JPanel();
+		// middlePanel.setLayout(new BorderLayout());
+		mainList = createJList();
+		mainList.setFixedCellWidth(70);
+		mainScroll = new JScrollPane(mainList);
+
+		initializeDefaultList();
+		panel_2.add(mainScroll);
+
 		panel_2.setLayout(null);
 		panel_2.add(panel_3);
 		panel_2.add(middlePanel);
@@ -116,7 +153,6 @@ public class ListLibraryBookWindow extends JPanel {
 		panel_4.setBounds(54, 282, 631, 275);
 		panel_2.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
-
 		table = new JTable() {
 			private static final long serialVersionUID = 1L;
 
@@ -127,10 +163,11 @@ public class ListLibraryBookWindow extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(model);
 		TableColumnModel colModel = table.getColumnModel();
-		colModel.getColumn(3).setPreferredWidth(200);
-		colModel.getColumn(2).setPreferredWidth(100);
-		colModel.getColumn(1).setPreferredWidth(400);
-		colModel.getColumn(0).setPreferredWidth(100);
+		colModel.getColumn(4).setPreferredWidth(200);
+		colModel.getColumn(3).setPreferredWidth(50);
+		colModel.getColumn(2).setPreferredWidth(50);
+		colModel.getColumn(1).setPreferredWidth(100);
+		colModel.getColumn(0).setPreferredWidth(75);
 		JScrollPane jScrollPane = new JScrollPane();
 		jScrollPane.setViewportView(table);
 		panel_4.add(jScrollPane);
@@ -149,6 +186,30 @@ public class ListLibraryBookWindow extends JPanel {
 					JOptionPane.showMessageDialog(frame, "Please select single row", "", JOptionPane.ERROR_MESSAGE);
 				} else {
 					JOptionPane.showMessageDialog(frame, "There is no row to delete", "", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
+		btnCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int count = table.getSelectedRowCount();
+				if (count == 1) {
+					selectedRow = table.getSelectedRow();
+					String isbn = (String) table.getValueAt(selectedRow, 0);
+					Book book = ci.getBookByISBN(isbn);
+					book.addCopy();
+					ci.saveBook(book);
+					model.setValueAt(book.getCopies().length, selectedRow, 3);
+
+					clearText();
+					JOptionPane.showMessageDialog(frame, "Copy a book successfully.", "",
+							JOptionPane.INFORMATION_MESSAGE);
+					table.clearSelection();
+
+				} else if (count > 1) {
+					JOptionPane.showMessageDialog(frame, "Please select single a book.", "", JOptionPane.ERROR_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(frame, "There is no book to copy", "", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

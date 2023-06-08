@@ -21,4 +21,6 @@ public interface ControllerInterface {
 	public Collection<Book> allBooks();
 
 	public Book getBookByISBN(String isbn);
+
+	public void saveBook(Book book);
 }
