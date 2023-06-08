@@ -29,7 +29,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 
-public class ListLibraryMemberWindow {
+public class ListLibraryMemberWindow extends JPanel {
 	private JLabel lblFirstName;
 	private JTextField txtFieldFirstName;
 	private JLabel lblMemberId;
@@ -56,18 +56,18 @@ public class ListLibraryMemberWindow {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ListLibraryMemberWindow window = new ListLibraryMemberWindow();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					ListLibraryMemberWindow window = new ListLibraryMemberWindow();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
@@ -80,12 +80,9 @@ public class ListLibraryMemberWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 752, 647);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		setLayout(new BorderLayout());
 		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.NORTH);
+		add(panel, BorderLayout.NORTH);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JLabel lblNewLabel = new JLabel("Table of Libary Members");
@@ -102,11 +99,11 @@ public class ListLibraryMemberWindow {
 		
 		
 		JPanel panel_1 = new JPanel();
-		frame.getContentPane().add(panel_1, BorderLayout.SOUTH);
+		add(panel_1, BorderLayout.SOUTH);
 		
 		
 		JPanel panel_2 = new JPanel();
-		frame.getContentPane().add(panel_2, BorderLayout.CENTER);
+		add(panel_2, BorderLayout.CENTER);
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBounds(154, 231, 430, 39);

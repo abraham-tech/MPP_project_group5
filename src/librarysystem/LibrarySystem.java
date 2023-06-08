@@ -46,6 +46,11 @@ public class LibrarySystem extends JFrame implements LibWindow {
     String pathToImage;
     JTextField username;
     JTextField password;
+    JSplitPane splitPane;
+    JButton booksButton;
+    JButton usersButton;
+    JButton logoutButton;
+    JButton checkoutButton;
     
     private User loggedInUser;
     public User getLoggedInUser() {
@@ -90,7 +95,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		menuPanel.setBackground(Color.LIGHT_GRAY);
 		contentPanel = new JPanel();
 		contentPanel.setLayout(new GridLayout(1,1));
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
 	    splitPane.setDividerLocation(150);
 		getContentPane().add(splitPane);
 	}
@@ -159,10 +164,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
     
     public void initAdminMenu() {
     	clearMenu();
-		JButton booksButton = new JButton("Books");
-		JButton usersButton = new JButton("Users");
-		JButton logoutButton = new JButton("Sign Out");
-		logoutButton.addActionListener(new LogoutListener());
+		booksButton = new JButton("Books");
+		usersButton = new JButton("Users");
+		
+		logoutButton = new JButton("Sign Out");
 		menuPanel.add(booksButton);
 		menuPanel.add(usersButton);
 		JSeparator s = new JSeparator();
@@ -175,8 +180,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	clearMenu();
 		JButton checkoutButton = new JButton("Checkout");
 		menuPanel.add(checkoutButton);
-		JButton logoutButton = new JButton("Sign Out");
-		logoutButton.addActionListener(new LogoutListener());
+		logoutButton = new JButton("Sign Out");
 		JSeparator s = new JSeparator();
         s.setOrientation(SwingConstants.HORIZONTAL);
         menuPanel.add(s);
@@ -185,9 +189,9 @@ public class LibrarySystem extends JFrame implements LibWindow {
     
     public void initBothMenu() {
     	clearMenu();
-    	JButton booksButton = new JButton("Books");
-		JButton usersButton = new JButton("Users");
-		JButton checkoutButton = new JButton("Checkout");
+    	booksButton = new JButton("Books");
+		usersButton = new JButton("Users");
+		checkoutButton = new JButton("Checkout");
 		menuPanel.add(booksButton);
 		menuPanel.add(usersButton);
 		menuPanel.add(checkoutButton);
@@ -223,7 +227,26 @@ public class LibrarySystem extends JFrame implements LibWindow {
 				initAdminMenu();
 			} else if(user.getAuthorization() == Auth.LIBRARIAN) {
 				initLibrarianMenu();
+			} else if (user.getAuthorization() == Auth.BOTH) {
+				initBothMenu();
 			}
+			if (usersButton != null) {
+				usersButton.addActionListener((evt1) -> {
+					if (!(contentPanel instanceof ListLibraryMemberWindow)) {
+						contentPanel = new ListLibraryMemberWindow();
+						splitPane.setRightComponent(contentPanel);
+					}
+				});
+			}
+			if (booksButton != null) {
+				booksButton.addActionListener((evt1) -> {
+					contentPanel = new JPanel();
+					insertSplashImage();
+					splitPane.setRightComponent(contentPanel);
+				});
+			}
+			
+			logoutButton.addActionListener(new LogoutListener());
 		});
 	}
     
@@ -246,6 +269,12 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	 		        addMember.setVisible(true);
 	 		        addBook.setVisible(true);
 	 		        allMemberIds.setVisible(true);
+	 		        break;
+	 		    case BOTH:
+	 		    	addMember.setVisible(true);
+	 		        addBook.setVisible(true);
+	 		        allMemberIds.setVisible(true);
+	 		        checkOutBook.setVisible(true);
 	 		        break;
 				default:
 					break;
