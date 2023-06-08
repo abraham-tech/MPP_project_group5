@@ -95,7 +95,7 @@ public class ListLibraryBookWindow extends JPanel {
 		add(panel_2, BorderLayout.CENTER);
 
 		JPanel panel_3 = new JPanel();
-		panel_3.setBounds(154, 231, 430, 39);
+		panel_3.setBounds(100, 231, 430, 39);
 
 		btnAdd = new JButton("ADD");
 		panel_3.add(btnAdd);
@@ -112,7 +112,7 @@ public class ListLibraryBookWindow extends JPanel {
 		panel_3.add(btnUpdate);
 
 		middlePanel = new JPanel();
-		middlePanel.setBounds(25, 5, 721, 219);
+		middlePanel.setBounds(0, 5, 500, 219);
 		middlePanel.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblIsbn = new JLabel("ISBN:");
@@ -150,7 +150,7 @@ public class ListLibraryBookWindow extends JPanel {
 		panel_2.add(middlePanel);
 
 		panel_4 = new JPanel();
-		panel_4.setBounds(54, 282, 631, 275);
+		panel_4.setBounds(0, 282, 631, 275);
 		panel_2.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
 		table = new JTable() {
