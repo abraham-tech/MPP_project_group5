@@ -78,13 +78,14 @@ public class ListLibraryBookWindow extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("Book shelf");
 		panel.add(lblNewLabel);
-		Object[] columnsObjects = { "ISBN", "Title", "Maximum checkout", "Copies", "Authors" };
+		Object[] columnsObjects = { "ISBN", "Title", "Maximum checkout", "Available copies", "Total copies",
+				"Authors" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columnsObjects);
 		Collection<Book> books = ci.allBooks();
 		for (Book book : books) {
 			Object[] objects = { book.getIsbn(), book.getTitle(), book.getMaxCheckoutLength(),
-					book.getCopies().length, book.getAuthors().toString() };
+					book.getAvailableBooksLength(), book.getCopies().length, book.getAuthors().toString() };
 			model.addRow(objects);
 		}
 
@@ -112,7 +113,7 @@ public class ListLibraryBookWindow extends JPanel {
 		panel_3.add(btnUpdate);
 
 		middlePanel = new JPanel();
-		middlePanel.setBounds(25, 5, 721, 219);
+		middlePanel.setBounds(5, 5, 460, 219);
 		middlePanel.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblIsbn = new JLabel("ISBN:");
@@ -150,7 +151,7 @@ public class ListLibraryBookWindow extends JPanel {
 		panel_2.add(middlePanel);
 
 		panel_4 = new JPanel();
-		panel_4.setBounds(54, 282, 631, 275);
+		panel_4.setBounds(5, 282, 580, 275);
 		panel_2.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
 		table = new JTable() {
@@ -163,7 +164,8 @@ public class ListLibraryBookWindow extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(model);
 		TableColumnModel colModel = table.getColumnModel();
-		colModel.getColumn(4).setPreferredWidth(200);
+		colModel.getColumn(5).setPreferredWidth(200);
+		colModel.getColumn(4).setPreferredWidth(50);
 		colModel.getColumn(3).setPreferredWidth(50);
 		colModel.getColumn(2).setPreferredWidth(50);
 		colModel.getColumn(1).setPreferredWidth(100);
@@ -199,7 +201,9 @@ public class ListLibraryBookWindow extends JPanel {
 					Book book = ci.getBookByISBN(isbn);
 					book.addCopy();
 					ci.saveBook(book);
-					model.setValueAt(book.getCopies().length, selectedRow, 3);
+
+					model.setValueAt(book.getAvailableBooksLength(), selectedRow, 3);
+					model.setValueAt(book.getCopies().length, selectedRow, 4);
 
 					clearText();
 					JOptionPane.showMessageDialog(frame, "Copy a book successfully.", "",

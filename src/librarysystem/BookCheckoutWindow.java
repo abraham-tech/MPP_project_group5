@@ -17,6 +17,7 @@ public class BookCheckoutWindow extends JPanel {
 
     private JTextField bookIsbnTextField;
     private JTextField memberIdTextField;
+    DefaultTableModel model = new DefaultTableModel();
     ControllerInterface ci = new SystemController();
 
     /**
@@ -46,23 +47,24 @@ public class BookCheckoutWindow extends JPanel {
         errorLabel.setText("Hello World");
         panel.add(lblNewLabel);
 
-        Object[] columnsObjects = {"CHECKOUT DATE", "DUE DATE", "ISBN", "BOOK TITLE", "BORROWER", "TEL"};
-        DefaultTableModel model = new DefaultTableModel();
+        Object[] columnsObjects = { "CHECKOUT DATE", "DUE DATE", "ISBN", "BOOK TITLE", "BORROWER", "TEL" };
+
         model.setColumnIdentifiers(columnsObjects);
+        getCheckoutHistoryList();
 
-        Collection<CheckoutHistory> checkouts = ci.getCheckoutHistory();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        // Collection<CheckoutHistory> checkouts = ci.getCheckoutHistory();
+        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
-        for (CheckoutHistory checkout : checkouts) {
-            model.addRow(new Object[]{
-                    checkout.getCheckoutDate().format(formatter),
-                    checkout.getDueDate().format(formatter),
-                    checkout.getCopy().getBook().getIsbn(),
-                    checkout.getCopy().getBook().getTitle(),
-                    checkout.getMember().getFullName(),
-                    checkout.getMember().getTelephone(),
-            });
-        }
+        // for (CheckoutHistory checkout : checkouts) {
+        // model.addRow(new Object[] {
+        // checkout.getCheckoutDate().format(formatter),
+        // checkout.getDueDate().format(formatter),
+        // checkout.getCopy().getBook().getIsbn(),
+        // checkout.getCopy().getBook().getTitle(),
+        // checkout.getMember().getFullName(),
+        // checkout.getMember().getTelephone(),
+        // });
+        // }
 
         JPanel panel_1 = new JPanel();
         add(panel_1, BorderLayout.SOUTH);
@@ -73,13 +75,12 @@ public class BookCheckoutWindow extends JPanel {
         JPanel panel_3 = new JPanel();
         panel_3.setBounds(154, 231, 430, 39);
 
-
         JButton checkoutBookButton = new JButton("CHECKOUT BOOK");
         panel_3.add(checkoutBookButton);
         checkoutBookButton.setHorizontalAlignment(SwingConstants.RIGHT);
 
         JPanel middlePanel = new JPanel();
-        middlePanel.setBounds(25, 5, 721, 219);
+        middlePanel.setBounds(5, 5, 460, 219);
         middlePanel.setLayout(new GridLayout(0, 2, 0, 0));
         JLabel memberIdLabel = new JLabel("Member ID:");
         middlePanel.add(memberIdLabel);
@@ -99,7 +100,7 @@ public class BookCheckoutWindow extends JPanel {
         panel_2.add(middlePanel);
 
         JPanel panel_4 = new JPanel();
-        panel_4.setBounds(54, 282, 631, 275);
+        panel_4.setBounds(5, 282, 580, 275);
         panel_2.add(panel_4);
         panel_4.setLayout(new BorderLayout(0, 0));
 
@@ -128,7 +129,9 @@ public class BookCheckoutWindow extends JPanel {
             try {
                 ci.checkBook(memberId, bookIsbn);
                 clearText();
-                JOptionPane.showMessageDialog(this, "Book successfully checked out", "", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Book successfully checked out", "",
+                        JOptionPane.INFORMATION_MESSAGE);
+                getCheckoutHistoryList();
             } catch (LibrarySystemException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "", JOptionPane.ERROR_MESSAGE);
             }
@@ -138,5 +141,21 @@ public class BookCheckoutWindow extends JPanel {
     void clearText() {
         memberIdTextField.setText("");
         bookIsbnTextField.setText("");
+    }
+
+    void getCheckoutHistoryList() {
+        Collection<CheckoutHistory> checkouts = ci.getCheckoutHistory();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        model.setRowCount(0);
+        for (CheckoutHistory checkout : checkouts) {
+            model.addRow(new Object[] {
+                    checkout.getCheckoutDate().format(formatter),
+                    checkout.getDueDate().format(formatter),
+                    checkout.getCopy().getBook().getIsbn(),
+                    checkout.getCopy().getBook().getTitle(),
+                    checkout.getMember().getFullName(),
+                    checkout.getMember().getTelephone(),
+            });
+        }
     }
 }
