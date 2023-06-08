@@ -31,29 +31,29 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.User;
 
-
 public class LibrarySystem extends JFrame implements LibWindow {
 	ControllerInterface ci = new SystemController();
-	public final static LibrarySystem INSTANCE =new LibrarySystem();
+	public final static LibrarySystem INSTANCE = new LibrarySystem();
 	JPanel mainPanel;
 	JPanel menuPanel;
 	JPanel contentPanel;
 	JMenuBar menuBar;
-    JMenu options;
-    JMenuItem login, logout;
-    JMenuItem addBook, addMember, checkOutBook, allMemberIds;
-    JSeparator separator;
-    String pathToImage;
-    JTextField username;
-    JTextField password;
-    JSplitPane splitPane;
-    JButton booksButton;
-    JButton usersButton;
-    JButton logoutButton;
-    JButton checkoutButton;
-    
-    private User loggedInUser;
-    public User getLoggedInUser() {
+	JMenu options;
+	JMenuItem login, logout;
+	JMenuItem addBook, addMember, checkOutBook, allMemberIds;
+	JSeparator separator;
+	String pathToImage;
+	JTextField username;
+	JTextField password;
+	JSplitPane splitPane;
+	JButton booksButton;
+	JButton usersButton;
+	JButton logoutButton;
+	JButton checkoutButton;
+
+	private User loggedInUser;
+
+	public User getLoggedInUser() {
 		return loggedInUser;
 	}
 
@@ -61,91 +61,90 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		this.loggedInUser = loggedInUser;
 	}
 
-
 	private boolean isInitialized = false;
-    
-    private static LibWindow[] allWindows = { 
-    	LibrarySystem.INSTANCE,
-		LoginWindow.INSTANCE,
+
+	private static LibWindow[] allWindows = {
+			LibrarySystem.INSTANCE,
+			LoginWindow.INSTANCE,
 	};
-    	
-	public static void hideAllWindows() {		
-		for(LibWindow frame: allWindows) {
-			frame.setVisible(false);			
+
+	public static void hideAllWindows() {
+		for (LibWindow frame : allWindows) {
+			frame.setVisible(false);
 		}
 	}
-     
-    private LibrarySystem() {}
-    
-    public void init() {
-    	formatContentPane();
-    	setPathToImage();
-    	insertSplashImage();
-		
-		//createMenus();
-		//pack();
-    	initLoginForm();
-		setSize(810,500);
+
+	private LibrarySystem() {
+	}
+
+	public void init() {
+		formatContentPane();
+		setPathToImage();
+		insertSplashImage();
+
+		// createMenus();
+		// pack();
+		initLoginForm();
+		setSize(810, 500);
 		isInitialized = true;
-    }
-    
-    private void formatContentPane() {
+	}
+
+	private void formatContentPane() {
 		menuPanel = new JPanel();
-		menuPanel.setLayout(new GridLayout(15, 1) );
+		menuPanel.setLayout(new GridLayout(15, 1));
 		menuPanel.setBackground(Color.LIGHT_GRAY);
 		contentPanel = new JPanel();
-		contentPanel.setLayout(new GridLayout(1,1));
+		contentPanel.setLayout(new GridLayout(1, 1));
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
-	    splitPane.setDividerLocation(150);
+		splitPane.setDividerLocation(150);
 		getContentPane().add(splitPane);
 	}
-    
-    private void setPathToImage() {
-    	String currDirectory = System.getProperty("user.dir");
-    	// for mac use this
-    	pathToImage = currDirectory+"/src/librarysystem/library.jpg";
-    	// for windows use this 
-    	// pathToImage = currDirectory+"\\src\\librarysystem\\ßlibrary.jpg";
-    }
-    
-    private void insertSplashImage() {
-        ImageIcon image = new ImageIcon(pathToImage);
-        contentPanel.add(new JLabel(image));	
-    }
-    
-    /*
-    private void addMenuItems() {
-       options = new JMenu("Options");  
- 	   menuBar.add(options);
- 	   login = new JMenuItem("Login");
- 	   login.addActionListener(new LoginListener());
- 	   allBookIds = new JMenuItem("All Book Ids");
- 	   allBookIds.addActionListener(new AllBookIdsListener());
- 	   allMemberIds = new JMenuItem("All Member Ids");
- 	   allMemberIds.addActionListener(new AllMemberIdsListener());
- 	   options.add(login);
- 	   options.add(allBookIds);
- 	   options.add(allMemberIds);
-    }
-    */
-    
-    
-    public void initLoginForm() {
-    	clearMenu();
-    	JLabel loginLabel = new JLabel("Sign In:");
+
+	private void setPathToImage() {
+		String currDirectory = System.getProperty("user.dir");
+		// for mac use this
+		pathToImage = currDirectory + "/src/librarysystem/library.jpg";
+		// for windows use this
+		// pathToImage = currDirectory+"\\src\\librarysystem\\ßlibrary.jpg";
+	}
+
+	private void insertSplashImage() {
+		ImageIcon image = new ImageIcon(pathToImage);
+		contentPanel.add(new JLabel(image));
+	}
+
+	/*
+	 * private void addMenuItems() {
+	 * options = new JMenu("Options");
+	 * menuBar.add(options);
+	 * login = new JMenuItem("Login");
+	 * login.addActionListener(new LoginListener());
+	 * allBookIds = new JMenuItem("All Book Ids");
+	 * allBookIds.addActionListener(new AllBookIdsListener());
+	 * allMemberIds = new JMenuItem("All Member Ids");
+	 * allMemberIds.addActionListener(new AllMemberIdsListener());
+	 * options.add(login);
+	 * options.add(allBookIds);
+	 * options.add(allMemberIds);
+	 * }
+	 */
+
+	public void initLoginForm() {
+		clearMenu();
+		JLabel loginLabel = new JLabel("Sign In:");
 		Util.adjustLabelFont(loginLabel, Color.BLUE.darker(), true);
 		menuPanel.add(loginLabel);
 		JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
+		s.setOrientation(SwingConstants.HORIZONTAL);
+		menuPanel.add(s);
 		username = new JTextField(45);
-		username.setMaximumSize( username.getPreferredSize() );
+		username.setMaximumSize(username.getPreferredSize());
 		JLabel uLabel = new JLabel("Username:");
 		uLabel.setFont(Util.makeSmallFont(uLabel.getFont()));
 		menuPanel.add(uLabel);
 		menuPanel.add(username);
 		password = new JTextField(45);
-		password.setMaximumSize( password.getPreferredSize() );
+		password.setMaximumSize(password.getPreferredSize());
 		JLabel pLabel = new JLabel("Password:");
 		pLabel.setFont(Util.makeSmallFont(pLabel.getFont()));
 		menuPanel.add(pLabel);
@@ -154,42 +153,42 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		addLoginButtonListener(loginButton);
 		menuPanel.add(loginButton);
 		menuPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
-    }
-    
-    private void clearMenu() {
-    	menuPanel.removeAll();
-    	menuPanel.revalidate();
-    	menuPanel.repaint();
-    }
-    
-    public void initAdminMenu() {
-    	clearMenu();
+	}
+
+	private void clearMenu() {
+		menuPanel.removeAll();
+		menuPanel.revalidate();
+		menuPanel.repaint();
+	}
+
+	public void initAdminMenu() {
+		clearMenu();
 		booksButton = new JButton("Books");
 		usersButton = new JButton("Users");
-		
+
 		logoutButton = new JButton("Sign Out");
 		menuPanel.add(booksButton);
 		menuPanel.add(usersButton);
 		JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
+		s.setOrientation(SwingConstants.HORIZONTAL);
+		menuPanel.add(s);
 		menuPanel.add(logoutButton);
-    }
-    
-    public void initLibrarianMenu() {
-    	clearMenu();
+	}
+
+	public void initLibrarianMenu() {
+		clearMenu();
 		JButton checkoutButton = new JButton("Checkout");
 		menuPanel.add(checkoutButton);
 		logoutButton = new JButton("Sign Out");
 		JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
+		s.setOrientation(SwingConstants.HORIZONTAL);
+		menuPanel.add(s);
 		menuPanel.add(logoutButton);
-    }
-    
-    public void initBothMenu() {
-    	clearMenu();
-    	booksButton = new JButton("Books");
+	}
+
+	public void initBothMenu() {
+		clearMenu();
+		booksButton = new JButton("Books");
 		usersButton = new JButton("Users");
 		checkoutButton = new JButton("Checkout");
 		menuPanel.add(booksButton);
@@ -198,34 +197,34 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		JButton logoutButton = new JButton("Sign Out");
 		logoutButton.addActionListener(new LogoutListener());
 		JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
+		s.setOrientation(SwingConstants.HORIZONTAL);
+		menuPanel.add(s);
 		menuPanel.add(logoutButton);
-    }
-    
-    private void addLoginButtonListener(JButton butn) {
+	}
+
+	private void addLoginButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
 			String userId = username.getText();
 			String userPass = password.getText();
-			if(userId == null || userId.isBlank() || userPass == null || userPass.isBlank()) {
-				JOptionPane.showMessageDialog(this,"Invalid username or password", "", JOptionPane.ERROR_MESSAGE);
+			if (userId == null || userId.isBlank() || userPass == null || userPass.isBlank()) {
+				JOptionPane.showMessageDialog(this, "Invalid username or password", "", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			DataAccess da = new DataAccessFacade();
 			Map<String, User> users = da.readUserMap();
-			if(!users.containsKey(userId)) {
-				JOptionPane.showMessageDialog(this,"Invalid username", "", JOptionPane.ERROR_MESSAGE);
+			if (!users.containsKey(userId)) {
+				JOptionPane.showMessageDialog(this, "Invalid username", "", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			User user = users.get(userId);
-			if(!userPass.equals(user.getPassword())) {
-				JOptionPane.showMessageDialog(this,"Invalid password", "", JOptionPane.ERROR_MESSAGE);
+			if (!userPass.equals(user.getPassword())) {
+				JOptionPane.showMessageDialog(this, "Invalid password", "", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			LibrarySystem.INSTANCE.setLoggedInUser(user);
-			if(user.getAuthorization() == Auth.ADMIN) {
+			if (user.getAuthorization() == Auth.ADMIN) {
 				initAdminMenu();
-			} else if(user.getAuthorization() == Auth.LIBRARIAN) {
+			} else if (user.getAuthorization() == Auth.LIBRARIAN) {
 				initLibrarianMenu();
 			} else if (user.getAuthorization() == Auth.BOTH) {
 				initBothMenu();
@@ -240,58 +239,62 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			}
 			if (booksButton != null) {
 				booksButton.addActionListener((evt1) -> {
-					contentPanel = new JPanel();
-					insertSplashImage();
-					splitPane.setRightComponent(contentPanel);
+					if (!(contentPanel instanceof ListLibraryBookWindow)) {
+						contentPanel = new ListLibraryBookWindow();
+						splitPane.setRightComponent(contentPanel);
+					}
+					// contentPanel = new JPanel();
+					// insertSplashImage();
+					// splitPane.setRightComponent(contentPanel);
 				});
 			}
-			
+
 			logoutButton.addActionListener(new LogoutListener());
 		});
 	}
-    
-    public void refreshMenuByUserRole() {
-    	if(loggedInUser != null) {	
-    		separator.setVisible(true);
-    		logout.setVisible(true);
-	 		login.setVisible(false);
-	 		checkOutBook.setVisible(false);
-		    addMember.setVisible(false);
-		    addBook.setVisible(false);
-		    allMemberIds.setVisible(false);
-		    dataaccess.Auth auth = loggedInUser.getAuthorization();
-	 		switch (auth) {
-	 			case LIBRARIAN: {
-	 				checkOutBook.setVisible(true);
-	 		        break;
-	 			}
-	 		    case ADMIN:
-	 		        addMember.setVisible(true);
-	 		        addBook.setVisible(true);
-	 		        allMemberIds.setVisible(true);
-	 		        break;
-	 		    case BOTH:
-	 		    	addMember.setVisible(true);
-	 		        addBook.setVisible(true);
-	 		        allMemberIds.setVisible(true);
-	 		        checkOutBook.setVisible(true);
-	 		        break;
+
+	public void refreshMenuByUserRole() {
+		if (loggedInUser != null) {
+			separator.setVisible(true);
+			logout.setVisible(true);
+			login.setVisible(false);
+			checkOutBook.setVisible(false);
+			addMember.setVisible(false);
+			addBook.setVisible(false);
+			allMemberIds.setVisible(false);
+			dataaccess.Auth auth = loggedInUser.getAuthorization();
+			switch (auth) {
+				case LIBRARIAN: {
+					checkOutBook.setVisible(true);
+					break;
+				}
+				case ADMIN:
+					addMember.setVisible(true);
+					addBook.setVisible(true);
+					allMemberIds.setVisible(true);
+					break;
+				case BOTH:
+					addMember.setVisible(true);
+					addBook.setVisible(true);
+					allMemberIds.setVisible(true);
+					checkOutBook.setVisible(true);
+					break;
 				default:
 					break;
-			 }
-	 		   
- 	   } else { 		 
- 		   login.setVisible(true);
- 		   separator.setVisible(false);
- 		   checkOutBook.setVisible(false);
- 	       addMember.setVisible(false);
- 	       addBook.setVisible(false);
- 	       logout.setVisible(false);
- 	       allMemberIds.setVisible(false);
- 	   }
-    }
-    
-    class LoginListener implements ActionListener {
+			}
+
+		} else {
+			login.setVisible(true);
+			separator.setVisible(false);
+			checkOutBook.setVisible(false);
+			addMember.setVisible(false);
+			addBook.setVisible(false);
+			logout.setVisible(false);
+			allMemberIds.setVisible(false);
+		}
+	}
+
+	class LoginListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -299,20 +302,20 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			LoginWindow.INSTANCE.init();
 			Util.centerFrameOnDesktop(LoginWindow.INSTANCE);
 			LoginWindow.INSTANCE.setVisible(true);
-			
+
 		}
-    	
-    }
-    
-    class LogoutListener implements ActionListener {
+
+	}
+
+	class LogoutListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			loggedInUser = null;
-			initLoginForm();			
+			initLoginForm();
 		}
-    	
-    }
+
+	}
 
 	@Override
 	public boolean isInitialized() {
@@ -323,7 +326,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	@Override
 	public void isInitialized(boolean val) {
 		// TODO Auto-generated method stub
-		
+
 	}
-    
+
 }
