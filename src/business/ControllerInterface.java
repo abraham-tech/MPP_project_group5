@@ -6,6 +6,8 @@ import java.util.List;
 public interface ControllerInterface {
 	public void login(String id, String password) throws LoginException;
 
+	void checkBook(String memberId, String isbn) throws LibrarySystemException;
+
 	public List<String> allMemberIds();
 
 	public List<String> allBookIds();
@@ -19,6 +21,8 @@ public interface ControllerInterface {
 	public LibraryMember getLibraryMemberById(String memberId);
 
 	public Collection<Book> allBooks();
+
+	List<CheckoutHistory> getCheckoutHistory();
 
 	public Book getBookByISBN(String isbn);
 

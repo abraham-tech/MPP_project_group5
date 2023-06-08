@@ -31,7 +31,6 @@ final public class Book implements Serializable {
 			BookCopy c = copies[i];
 			if(c.equals(copy)) {
 				copies[i] = copy;
-				
 			}
 		}
 	}
@@ -113,8 +112,8 @@ final public class Book implements Serializable {
 		return maxCheckoutLength;
 	}
 
-	
-	
-	
-	
+
+    public boolean haveMultipleAuthors() {
+        return authors != null && authors.size() > 1;
+    }
 }

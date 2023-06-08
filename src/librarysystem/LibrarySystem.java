@@ -1,29 +1,17 @@
 package librarysystem;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Map;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.JSplitPane;
-import javax.swing.JTextField;
-
 import business.ControllerInterface;
 import business.SystemController;
 import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.User;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map;
 
 public class LibrarySystem extends JFrame implements LibWindow {
 	ControllerInterface ci = new SystemController();
@@ -160,9 +148,16 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		booksButton = new JButton("Books");
 		usersButton = new JButton("Users");
 		checkoutButton = new JButton("Checkout");
+		checkoutButton.addActionListener(e -> {
+			if (!(contentPanel instanceof BookCheckoutWindow)) {
+				contentPanel = new BookCheckoutWindow();
+				splitPane.setRightComponent(contentPanel);
+			}
+		});
 		menuPanel.add(booksButton);
 		menuPanel.add(usersButton);
 		menuPanel.add(checkoutButton);
+
         addLogoutButton();
     }
     

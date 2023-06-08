@@ -1,10 +1,10 @@
 package dataaccess;
 
-import java.util.HashMap;
-
 import business.Book;
 import business.LibraryMember;
-import dataaccess.DataAccessFacade.StorageType;
+
+import java.util.HashMap;
+import java.util.Optional;
 
 public interface DataAccess {
 	public HashMap<String, Book> readBooksMap();
@@ -18,4 +18,8 @@ public interface DataAccess {
 	public void deleteMember(String memberId);
 
 	public void saveBook(Book book);
+
+	Optional<Book> findBookByIsbn(String isbn);
+
+	Optional<LibraryMember> findMemberById(String memberId);
 }

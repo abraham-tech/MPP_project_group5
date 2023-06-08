@@ -1,5 +1,8 @@
 package dataaccess;
 
+import business.Book;
+import business.LibraryMember;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,11 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
-
-import business.Book;
-import business.BookCopy;
-import business.LibraryMember;
-import dataaccess.DataAccessFacade.StorageType;
+import java.util.Optional;
 
 public class DataAccessFacade implements DataAccess {
 
@@ -21,8 +20,7 @@ public class DataAccessFacade implements DataAccess {
 		BOOKS, MEMBERS, USERS;
 	}
 
-	public static final String OUTPUT_DIR = System.getProperty("user.dir")
-			+ "/src/dataaccess/storage";
+	public static final String OUTPUT_DIR = System.getProperty("user.dir") + "/src/dataaccess/storage";
 	public static final String DATE_PATTERN = "MM/dd/yyyy";
 
 	// implement: other save operations
@@ -31,6 +29,23 @@ public class DataAccessFacade implements DataAccess {
 		String memberId = member.getMemberId();
 		mems.put(memberId, member);
 		saveToStorage(StorageType.MEMBERS, mems);
+	}
+
+	@Override
+	public void saveBook(Book book) {
+		HashMap<String, Book> books = readBooksMap();
+		books.put(book.getIsbn(), book);
+		saveToStorage(StorageType.BOOKS, books);
+	}
+
+	@Override
+	public Optional<Book> findBookByIsbn(String isbn) {
+		return Optional.ofNullable(readBooksMap().get(isbn));
+	}
+
+	@Override
+	public Optional<LibraryMember> findMemberById(String memberId) {
+		return Optional.ofNullable(readMemberMap().get(memberId));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -77,40 +92,29 @@ public class DataAccessFacade implements DataAccess {
 	}
 
 	static void saveToStorage(StorageType type, Object ob) {
-		ObjectOutputStream out = null;
+
 		try {
 			Path path = FileSystems.getDefault().getPath(OUTPUT_DIR, type.toString());
-			out = new ObjectOutputStream(Files.newOutputStream(path));
-			out.writeObject(ob);
+			try(ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(path))) {
+				out.writeObject(ob);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (Exception e) {
-				}
-			}
 		}
 	}
 
 	static Object readFromStorage(StorageType type) {
-		ObjectInputStream in = null;
+
 		Object retVal = null;
 		try {
 			Path path = FileSystems.getDefault().getPath(OUTPUT_DIR, type.toString());
-			in = new ObjectInputStream(Files.newInputStream(path));
-			retVal = in.readObject();
+			try(ObjectInputStream in = new ObjectInputStream(Files.newInputStream(path))) {
+				retVal = in.readObject();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Exception e) {
-				}
-			}
 		}
+
 		return retVal;
 	}
 
@@ -157,13 +161,4 @@ public class DataAccessFacade implements DataAccess {
 		saveToStorage(StorageType.MEMBERS, mems);
 
 	}
-
-	@Override
-	public void saveBook(Book book) {
-		HashMap<String, Book> books = readBooksMap();
-		String isbn = book.getIsbn();
-		books.put(isbn, book);
-		saveToStorage(StorageType.BOOKS, books);
-	}
-
 }
