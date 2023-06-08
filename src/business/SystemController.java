@@ -1,6 +1,7 @@
 package business;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,8 +13,8 @@ import dataaccess.User;
 public class SystemController implements ControllerInterface {
 	public static Auth currentAuth = null;
 	
+	private DataAccess da = new DataAccessFacade();
 	public void login(String id, String password) throws LoginException {
-		DataAccess da = new DataAccessFacade();
 		HashMap<String, User> map = da.readUserMap();
 		if(!map.containsKey(id)) {
 			throw new LoginException("ID " + id + " not found");
@@ -27,7 +28,6 @@ public class SystemController implements ControllerInterface {
 	}
 	@Override
 	public List<String> allMemberIds() {
-		DataAccess da = new DataAccessFacade();
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readMemberMap().keySet());
 		return retval;
@@ -35,10 +35,33 @@ public class SystemController implements ControllerInterface {
 	
 	@Override
 	public List<String> allBookIds() {
-		DataAccess da = new DataAccessFacade();
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readBooksMap().keySet());
 		return retval;
+	}
+	@Override
+	public void saveMember(LibraryMember member) {
+		da.saveNewMember(member);
+		
+	}
+	@Override
+	public Collection<LibraryMember> alLibraryMembers() {
+		return da.readMemberMap().values();
+	}
+	@Override
+	public void deleteMember(String memberId) {
+		da.deleteMember(memberId);
+		
+	}
+	@Override
+	public LibraryMember getLibraryMemberById(String memberId) {
+		Collection<LibraryMember> members = da.readMemberMap().values();
+		for (LibraryMember member: members) {
+			if (member.getMemberId().equals(memberId)) {
+				return member;
+			}
+		}
+		return null;
 	}
 	
 	

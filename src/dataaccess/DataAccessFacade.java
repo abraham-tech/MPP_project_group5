@@ -144,5 +144,15 @@ public class DataAccessFacade implements DataAccess {
 		}
 		private static final long serialVersionUID = 5399827794066637059L;
 	}
+
+
+
+	@Override
+	public void deleteMember(String memberId) {
+		HashMap<String, LibraryMember> mems = readMemberMap();
+		mems.remove(memberId);
+		saveToStorage(StorageType.MEMBERS, mems);	
+		
+	}
 	
 }

@@ -207,6 +207,7 @@ public class LoginWindow extends JFrame implements LibWindow {
     				JOptionPane.showMessageDialog(this,"Invalid password", "", JOptionPane.ERROR_MESSAGE);
     				return;
     			}
+    			System.out.println(user.getAuthorization());
     			LibrarySystem.INSTANCE.setLoggedInUser(user);
     			LibrarySystem.INSTANCE.refreshMenuByUserRole();
     			LibrarySystem.hideAllWindows();
