@@ -32,9 +32,6 @@ public class Main {
     public static List<String> allHavingOverdueBook() {
         DataAccess da = new DataAccessFacade();
         Collection<LibraryMember> members = da.readMemberMap().values();
-        List<LibraryMember> mems = new ArrayList<>(members);
-        //implement
-
         List<CheckoutRecord> records = members.stream()
                 .map(LibraryMember::getCheckoutRecords)
                 .flatMap(List::stream)

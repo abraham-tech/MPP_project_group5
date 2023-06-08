@@ -1,13 +1,12 @@
 package dataaccess;
 
+import business.*;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-
-import business.Address;
-import business.Author;
-import business.Book;
-import business.LibraryMember;
 
 /**
  * This class loads data into the data repository and also
@@ -16,7 +15,6 @@ import business.LibraryMember;
  * once) before the rest of the application can work properly.
  * It will create three serialized objects in the dataaccess.storage
  * folder.
- * 
  *
  */
 public class TestData {
@@ -30,6 +28,15 @@ public class TestData {
 		DataAccess da = new DataAccessFacade();
 		System.out.println(da.readBooksMap());
 		System.out.println(da.readUserMap());
+		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
+		System.out.println(memberMap);
+
+		memberMap.values().forEach(member -> {
+			BookCopy copy = td.allBooks.get(0).getCopy(1);
+			int maxCheckoutLength = copy.getBook().getMaxCheckoutLength();
+			member.checkout(copy, LocalDate.now(), LocalDate.now().plusDays(maxCheckoutLength));
+			da.saveNewMember(member);
+		});
 	}
 	///create books
 	public void bookData() {
@@ -59,14 +66,13 @@ public class TestData {
 		libraryMember = new LibraryMember("1004", "Ricardo", "Montalbahn", "641-472-2871", addresses.get(7));
 		members.add(libraryMember);
 		
-		DataAccessFacade.loadMemberMap(members);	
+		DataAccessFacade.loadMemberMap(members);
 	}
 	
 	///////////// DATA //////////////
-	List<LibraryMember> members = new ArrayList<LibraryMember>();
-	@SuppressWarnings("serial")
-	
-	List<Address> addresses = new ArrayList<Address>() {
+	List<LibraryMember> members = new ArrayList<>();
+
+	List<Address> addresses = new ArrayList<>() {
 		{
 			add(new Address("101 S. Main", "Fairfield", "IA", "52556"));
 			add(new Address("51 S. George", "Georgetown", "MI", "65434"));
@@ -78,8 +84,8 @@ public class TestData {
 			add(new Address("501 Central", "Mountain View", "CA", "94707"));
 		}
 	};
-	@SuppressWarnings("serial")
-	public List<Author> allAuthors = new ArrayList<Author>() {
+
+	public List<Author> allAuthors = new ArrayList<>() {
 		{
 			add(new Author("Joe", "Thomas", "641-445-2123", addresses.get(0), "A happy man is he."));
 			add(new Author("Sandra", "Thomas", "641-445-2123", addresses.get(0), "A happy wife is she."));
@@ -88,19 +94,17 @@ public class TestData {
 			add(new Author("Sarah", "Connor", "123-422-2663", addresses.get(3), "Known for her clever style."));
 		}
 	};
-	
-	@SuppressWarnings("serial")
-	List<Book> allBooks = new ArrayList<Book>() {
+
+	List<Book> allBooks = new ArrayList<>() {
 		{
 			add(new Book("23-11451", "The Big Fish", 21, Arrays.asList(allAuthors.get(0), allAuthors.get(1))));
 			add(new Book("28-12331", "Antartica", 7, Arrays.asList(allAuthors.get(2))));
 			add(new Book("99-22223", "Thinking Java", 21, Arrays.asList(allAuthors.get(3))));
-			add(new Book("48-56882", "Jimmy's First Day of School", 7, Arrays.asList(allAuthors.get(4))));		
+			add(new Book("48-56882", "Jimmy's First Day of School", 7, Arrays.asList(allAuthors.get(4))));
 		}
 	};
-	
-	@SuppressWarnings("serial")
-	List<User> allUsers = new ArrayList<User>() {
+
+	List<User> allUsers = new ArrayList<>() {
 		{
 			add(new User("101", "xyz", Auth.LIBRARIAN));
 			add(new User("102", "abc", Auth.ADMIN));
