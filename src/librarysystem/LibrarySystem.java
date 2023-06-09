@@ -96,7 +96,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
         contentPanel.add(new JLabel(image));
     }
 
-    
     public void openBookCheckoutWindow() {
     	if (!(contentPanel instanceof BookCheckoutWindow)) {
             contentPanel = new BookCheckoutWindow();
