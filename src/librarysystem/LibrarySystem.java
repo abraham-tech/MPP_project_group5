@@ -131,7 +131,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     public void initAdminMenu() {
         clearMenu();
         booksButton = new JButton("Books");
-        usersButton = new JButton("Users");
+        usersButton = new JButton("Members");
         menuPanel.add(booksButton);
         menuPanel.add(usersButton);
         addLogoutButton();
