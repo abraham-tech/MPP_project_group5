@@ -33,7 +33,7 @@ public class SystemController implements ControllerInterface {
 		DataAccess dao = new DataAccessFacade();
 		//search member from data storage
 		LibraryMember member = dao.findMemberById(memberId)
-				.orElseThrow(() -> new LibrarySystemException("Member id ID: " + memberId + " notfound."));
+				.orElseThrow(() -> new LibrarySystemException("Member id ID: " + memberId + " not found."));
 
 		//search book from storage using ISBN
 		Book book = getBookByISBN(isbn);
