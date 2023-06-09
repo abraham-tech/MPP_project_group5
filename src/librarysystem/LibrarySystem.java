@@ -105,7 +105,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
         uLabel.setFont(Util.makeSmallFont(uLabel.getFont()));
         menuPanel.add(uLabel);
         menuPanel.add(username);
-        password = new JTextField(45);
+        password = new JPasswordField(45);
         password.setMaximumSize(password.getPreferredSize());
         JLabel pLabel = new JLabel("Password:");
         pLabel.setFont(Util.makeSmallFont(pLabel.getFont()));
