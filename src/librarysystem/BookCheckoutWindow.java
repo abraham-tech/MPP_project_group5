@@ -80,7 +80,6 @@ public class BookCheckoutWindow extends JPanel {
         middlePanel.add(bookIsbnLabel);
 
         Collection<Book> books = ci.allBooks();
-        System.out.println(books);
         String[] bookStrings = new String[books.size()];
         int index = 0;
         for (Book book : books) {
