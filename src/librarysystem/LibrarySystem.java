@@ -88,7 +88,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
         contentPanel.add(new JLabel(image));
     }
 
-
     public void initLoginForm() {
         clearMenu();
         JLabel loginLabel = new JLabel("Sign In:");
@@ -149,7 +148,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     public void initBothMenu() {
         clearMenu();
         booksButton = new JButton("Books");
-        usersButton = new JButton("Users");
+        usersButton = new JButton("Members");
         checkoutButton = new JButton("Checkout");
         checkoutButton.addActionListener(e -> openBookCheckoutWindow());
         menuPanel.add(booksButton);
@@ -223,7 +222,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
             }
         });
     }
-
 
     class LogoutListener implements ActionListener {
         @Override

@@ -30,7 +30,7 @@ import business.Book;
 import business.ControllerInterface;
 import business.SystemController;
 
-public class ListLibraryBookWindow extends JPanel {
+public class ListLibraryBookWindow extends JPanel implements LibWindow {
 	private JLabel lblIsbn;
 	private JTextField txtIsbn;
 	private JLabel lblAvailability;
@@ -55,7 +55,7 @@ public class ListLibraryBookWindow extends JPanel {
 	private int selectedRow = -1;
 
 	public ListLibraryBookWindow() {
-		initialize();
+		init();
 	}
 
 	private JList<String> createJList() {
@@ -264,5 +264,20 @@ public class ListLibraryBookWindow extends JPanel {
 		txtTitle.setText("");
 		txtIsbn.setText("");
 		txtAvailability.setText("");
+	}
+
+	@Override
+	public void init() {
+		initialize();
+	}
+
+	@Override
+	public boolean isInitialized() {
+		return false;
+	}
+
+	@Override
+	public void isInitialized(boolean val) {
+
 	}
 }

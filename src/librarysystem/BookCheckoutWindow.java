@@ -8,7 +8,7 @@ import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
-public class BookCheckoutWindow extends JPanel {
+public class BookCheckoutWindow extends JPanel implements LibWindow {
 
     public static final BookCheckoutWindow INSTANCE = new BookCheckoutWindow();
 
@@ -21,7 +21,7 @@ public class BookCheckoutWindow extends JPanel {
      * Create the application.
      */
     public BookCheckoutWindow() {
-        initialize();
+        init();
     }
 
     /**
@@ -127,7 +127,8 @@ public class BookCheckoutWindow extends JPanel {
             try {
                 clearText();
                 ci.checkBook(memberId, bookIsbn);
-                JOptionPane.showMessageDialog(this, "Book successfully checked out", "", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Book successfully checked out", "",
+                        JOptionPane.INFORMATION_MESSAGE);
                 getCheckoutHistoryList();
             } catch (LibrarySystemException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "", JOptionPane.ERROR_MESSAGE);
@@ -154,5 +155,19 @@ public class BookCheckoutWindow extends JPanel {
                     checkout.getMember().getTelephone(),
             });
         }
+    }
+
+    @Override
+    public void init() {
+        initialize();
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return false;
+    }
+
+    @Override
+    public void isInitialized(boolean val) {
     }
 }
