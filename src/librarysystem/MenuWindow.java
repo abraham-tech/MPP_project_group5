@@ -23,7 +23,7 @@ public class MenuWindow extends JPanel implements LibWindow {
 		if(role == Auth.ADMIN) {
 			booksButton = new JButton("Books");
 			booksButton.addActionListener(e -> LibrarySystem.INSTANCE.openListLibraryBookWindow());
-	        usersButton = new JButton("Users");
+	        usersButton = new JButton("Member");
 	        usersButton.addActionListener(e -> LibrarySystem.INSTANCE.openListLibraryMemberWindow());
 	        add(booksButton);
 	        add(usersButton);
@@ -34,7 +34,7 @@ public class MenuWindow extends JPanel implements LibWindow {
 		} else if(role == Auth.BOTH) {
 			booksButton = new JButton("Books");
 			booksButton.addActionListener(e -> LibrarySystem.INSTANCE.openListLibraryBookWindow());
-	        usersButton = new JButton("Users");
+	        usersButton = new JButton("Members");
 	        usersButton.addActionListener(e -> LibrarySystem.INSTANCE.openListLibraryMemberWindow());
 	        checkoutButton = new JButton("Checkout");
 	        checkoutButton.addActionListener(e -> LibrarySystem.INSTANCE.openBookCheckoutWindow());

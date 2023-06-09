@@ -15,13 +15,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     JPanel contentPanel;
     JSeparator separator;
     String pathToImage;
-    JTextField username;
-    JTextField password;
     JSplitPane splitPane;
-    JButton booksButton;
-    JButton usersButton;
-    JButton logoutButton;
-    JButton checkoutButton;
 
     private User loggedInUser;
 
@@ -62,7 +56,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
         formatContentPane();
         setPathToImage();
         insertSplashImage();
-        setSize(810, 500);
+        setSize(810, 700);
         isInitialized(true);
     }
 
@@ -94,6 +88,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
         contentPanel.repaint();
         ImageIcon image = new ImageIcon(pathToImage);
         contentPanel.add(new JLabel(image));
+        contentPanel.setBackground(Color.WHITE);
     }
 
     public void openBookCheckoutWindow() {
