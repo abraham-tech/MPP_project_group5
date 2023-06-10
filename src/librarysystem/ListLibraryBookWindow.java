@@ -50,7 +50,9 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 	private JScrollPane mainScroll;
 	private DefaultListModel<String> listModel = new DefaultListModel<String>();
 	private JButton removeSelectedButton, addItemButton;
-	private JTextField addField;
+	private JTextField searchField;
+	private JButton btnSearch;
+	DefaultTableModel model;
 
 	private int selectedRow = -1;
 
@@ -80,14 +82,9 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 		panel.add(lblNewLabel);
 		Object[] columnsObjects = { "ISBN", "Title", "Maximum checkout", "Available copies", "Total copies",
 				"Authors" };
-		DefaultTableModel model = new DefaultTableModel();
+		model = new DefaultTableModel();
 		model.setColumnIdentifiers(columnsObjects);
-		Collection<Book> books = ci.allBooks();
-		for (Book book : books) {
-			Object[] objects = { book.getIsbn(), book.getTitle(), book.getMaxCheckoutLength(),
-					book.getAvailableBooksLength(), book.getCopies().length, book.getAuthors().toString() };
-			model.addRow(objects);
-		}
+		updateJtable();
 
 		JPanel panel_1 = new JPanel();
 		add(panel_1, BorderLayout.SOUTH);
@@ -96,20 +93,27 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 		add(panel_2, BorderLayout.CENTER);
 
 		JPanel panel_3 = new JPanel();
-		panel_3.setBounds(154, 231, 430, 39);
+		panel_3.setLayout(new GridLayout(0, 6, 0, 0));
+		panel_3.setBounds(5, 231, 600, 39);
 
+		
+		searchField = new JTextField();
+		searchField.setSize(200, 24);
+		panel_3.add(searchField);
+		btnSearch = new JButton("SEARCH");
+		panel_3.add(btnSearch);
+		
+		
 		btnAdd = new JButton("ADD");
 		panel_3.add(btnAdd);
-		btnAdd.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		btnCopy = new JButton("COPY");
 		panel_3.add(btnCopy);
-		btnCopy.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		JButton btnDelete = new JButton("DELETE");
 		panel_3.add(btnDelete);
 
-		JButton btnUpdate = new JButton("Update");
+		JButton btnUpdate = new JButton("UPDATE");
 		panel_3.add(btnUpdate);
 
 		middlePanel = new JPanel();
@@ -217,6 +221,17 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 				}
 			}
 		});
+		
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					String isbn = searchField.getText();
+					if (isbn.isEmpty()) {
+						updateJtable();
+					} else {
+						updateJtableByIsbn(isbn);
+					}
+			}
+		});
 
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -264,6 +279,29 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 		txtTitle.setText("");
 		txtIsbn.setText("");
 		txtAvailability.setText("");
+	}
+	
+	void updateJtable() {
+		model.setRowCount(0);
+		Collection<Book> books = ci.allBooks();
+		for (Book book : books) {
+			Object[] objects = { book.getIsbn(), book.getTitle(), book.getMaxCheckoutLength(),
+					book.getAvailableBooksLength(), book.getCopies().length, book.getAuthors().toString() };
+			model.addRow(objects);
+		}
+	}
+	
+	void updateJtableByIsbn(String isbn) {
+		model.setRowCount(0);
+		Collection<Book> books = ci.allBooks();
+		for (Book book : books) {
+			if (book.getIsbn().equals(isbn) ) {
+				Object[] objects = { book.getIsbn(), book.getTitle(), book.getMaxCheckoutLength(),
+						book.getAvailableBooksLength(), book.getCopies().length, book.getAuthors().toString() };
+				model.addRow(objects);
+				break;
+			}
+		}
 	}
 
 	@Override
