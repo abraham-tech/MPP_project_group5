@@ -25,6 +25,7 @@ public class MenuWindow extends JPanel implements LibWindow {
             add(getUserListButton());
             add(getCheckoutButton());
             add(getSearchBookButton());
+            add(getSearchMemberButton());
         }
 
         JSeparator separator = new JSeparator();

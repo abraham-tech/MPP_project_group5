@@ -97,7 +97,7 @@ public class BookCheckoutWindow extends JPanel implements LibWindow {
         panel_2.add(middlePanel);
 
         JPanel panel_4 = new JPanel();
-        panel_4.setBounds(5, 282, 580, 275);
+        panel_4.setBounds(5, 282, 650, 275);
         panel_2.add(panel_4);
         panel_4.setLayout(new BorderLayout(0, 0));
 
