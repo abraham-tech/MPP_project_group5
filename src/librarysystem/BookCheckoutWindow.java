@@ -8,6 +8,8 @@ import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
+
 public class BookCheckoutWindow extends JPanel implements LibWindow {
 
     public static final BookCheckoutWindow INSTANCE = new BookCheckoutWindow();
@@ -127,8 +129,8 @@ public class BookCheckoutWindow extends JPanel implements LibWindow {
             try {
                 clearText();
                 ci.checkBook(memberId, bookIsbn);
-                JOptionPane.showMessageDialog(this, "Book successfully checked out", "",
-                        JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Book successfully checked out", "", INFORMATION_MESSAGE,
+                        new ImageIcon(System.getProperty("user.dir") + "/src/librarysystem/success.png"));
                 getCheckoutHistoryList();
             } catch (LibrarySystemException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "", JOptionPane.ERROR_MESSAGE);

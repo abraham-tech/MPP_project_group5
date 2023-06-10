@@ -110,6 +110,13 @@ public class LibrarySystem extends JFrame implements LibWindow {
             splitPane.setRightComponent(contentPanel);
         }
     }
+
+    public void openSearchMemberWindow() {
+        if (!(contentPanel instanceof SearchMemberWindow)) {
+            contentPanel = new SearchMemberWindow();
+            splitPane.setRightComponent(contentPanel);
+        }
+    }
     
     public void openListLibraryMemberWindow() {
     	if (!(contentPanel instanceof ListLibraryMemberWindow)) {
@@ -127,5 +134,4 @@ public class LibrarySystem extends JFrame implements LibWindow {
     public void isInitialized(boolean val) {
     	isInitialized = val;
     }
-
 }
