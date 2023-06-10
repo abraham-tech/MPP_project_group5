@@ -8,6 +8,7 @@ import dataaccess.DataAccessFacade;
 import dataaccess.User;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     JButton usersButton;
     JButton logoutButton;
     JButton checkoutButton;
+    JButton searchMemberButton;
 
     private User loggedInUser;
 
@@ -61,17 +63,21 @@ public class LibrarySystem extends JFrame implements LibWindow {
         insertSplashImage();
 
         initLoginForm();
-        setSize(810, 500);
+        setSize(800, 500);
+        this.isInitialized(true);
     }
 
     private void formatContentPane() {
         menuPanel = new JPanel();
         menuPanel.setLayout(new GridLayout(15, 1));
         menuPanel.setBackground(Color.LIGHT_GRAY);
+        menuPanel.setBorder(new EmptyBorder(15, 10, 10, 10));
+
         contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(1, 1));
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
-        splitPane.setDividerLocation(100);
+        splitPane.setDividerLocation(200);
+        splitPane.setDividerSize(0);
         getContentPane().add(splitPane);
     }
 
@@ -91,7 +97,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
     public void initLoginForm() {
         clearMenu();
         JLabel loginLabel = new JLabel("Sign In:");
-        splitPane.setDividerLocation(100);
         getContentPane().add(splitPane);
         Util.adjustLabelFont(loginLabel, Color.BLUE.darker(), true);
         menuPanel.add(loginLabel);
@@ -139,9 +144,14 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
     public void initLibrarianMenu() {
         clearMenu();
-        JButton checkoutButton = new JButton("Checkout");
+        checkoutButton = new JButton("Checkout");
         checkoutButton.addActionListener(e -> openBookCheckoutWindow());
         menuPanel.add(checkoutButton);
+
+        searchMemberButton = new JButton("Search Member");
+        searchMemberButton.addActionListener(e -> openSearchMemberWindow());
+        menuPanel.add(searchMemberButton);
+
         addLogoutButton();
     }
 
@@ -161,6 +171,13 @@ public class LibrarySystem extends JFrame implements LibWindow {
     private void openBookCheckoutWindow() {
         if (!(contentPanel instanceof BookCheckoutWindow)) {
             contentPanel = new BookCheckoutWindow();
+            splitPane.setRightComponent(contentPanel);
+        }
+    }
+
+    private void openSearchMemberWindow() {
+        if (!(contentPanel instanceof SearchMemberWindow)) {
+            contentPanel = new SearchMemberWindow();
             splitPane.setRightComponent(contentPanel);
         }
     }
@@ -237,14 +254,11 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
     @Override
     public boolean isInitialized() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.isInitialized;
     }
 
     @Override
     public void isInitialized(boolean val) {
-        // TODO Auto-generated method stub
-
+        this.isInitialized = val;
     }
-
 }

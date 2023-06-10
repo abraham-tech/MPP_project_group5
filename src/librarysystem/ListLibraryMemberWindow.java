@@ -1,34 +1,20 @@
 package librarysystem;
 
-import java.awt.EventQueue;
-import java.util.Collection;
-import java.util.List;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-
 import business.Address;
 import business.ControllerInterface;
 import business.LibraryMember;
 import business.SystemController;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import javax.swing.JScrollPane;
+import java.util.Collection;
+import java.util.List;
 
 public class ListLibraryMemberWindow extends JPanel implements LibWindow {
 	private JLabel lblFirstName;
@@ -86,7 +72,7 @@ public class ListLibraryMemberWindow extends JPanel implements LibWindow {
 		add(panel, BorderLayout.NORTH);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JLabel lblNewLabel = new JLabel("Table of Libary Members");
+		JLabel lblNewLabel = new JLabel("Table of Library Members");
 		panel.add(lblNewLabel);
 		Object[] columnsObjects = { "ID", "First Name", "Last Name", "TEL", "Address" };
 		DefaultTableModel model = new DefaultTableModel();
