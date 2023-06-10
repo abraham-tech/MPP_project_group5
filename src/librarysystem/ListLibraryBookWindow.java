@@ -96,7 +96,7 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 		searchField = new JTextField();
 		searchField.setSize(200, 24);
 		panel_3.add(searchField);
-		btnSearch = new JButton("SEARCH");
+		btnSearch = new JButton("ISBN SEARCH");
 		panel_3.add(btnSearch);
 
 		btnClearSearch = new JButton("CLEAR SEARCH");
