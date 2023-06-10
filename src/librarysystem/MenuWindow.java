@@ -4,7 +4,6 @@ import dataaccess.Auth;
 
 import javax.swing.*;
 
-
 public class MenuWindow extends JPanel implements LibWindow {
     public static final MenuWindow INSTANCE = new MenuWindow();
 
@@ -20,6 +19,8 @@ public class MenuWindow extends JPanel implements LibWindow {
         } else if (role == Auth.LIBRARIAN) {
             add(getCheckoutButton());
             add(getSearchMemberButton());
+            add(getSearchBookButton());
+
         } else if (role == Auth.BOTH) {
             add(getListBooksButton());
             add(getUserListButton());

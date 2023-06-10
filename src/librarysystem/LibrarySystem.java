@@ -43,18 +43,17 @@ public class LibrarySystem extends JFrame implements LibWindow {
     }
 
     private LibrarySystem() {
-    	menuPanel = new JPanel();
-    	menuPanel.setLayout(new GridLayout(15, 1));
+        menuPanel = new JPanel();
+        menuPanel.setLayout(new GridLayout(15, 1));
         menuPanel.setBackground(Color.LIGHT_GRAY);
         menuPanel.setBorder(new EmptyBorder(15, 30, 10, 30));
 
-
-    	contentPanel = new JPanel();
+        contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(1, 1));
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
         splitPane.setDividerLocation(200);
-        splitPane.setEnabled(false);
-        splitPane.setDividerSize(0);
+        // splitPane.setEnabled(false);
+        // splitPane.setDividerSize(0);
         getContentPane().add(splitPane);
     }
 
@@ -67,17 +66,16 @@ public class LibrarySystem extends JFrame implements LibWindow {
     }
 
     private void formatContentPane() {
-    	if(loggedInUser == null) {
-    		menuPanel = LoginWindow.INSTANCE;
-    	}
-    	else {
-    		MenuWindow.INSTANCE.setAuth(loggedInUser.getAuthorization());
-    		menuPanel = MenuWindow.INSTANCE;
-    	}
+        if (loggedInUser == null) {
+            menuPanel = LoginWindow.INSTANCE;
+        } else {
+            MenuWindow.INSTANCE.setAuth(loggedInUser.getAuthorization());
+            menuPanel = MenuWindow.INSTANCE;
+        }
         menuPanel.setLayout(new GridLayout(15, 1));
         menuPanel.setBackground(Color.LIGHT_GRAY);
-		splitPane.setLeftComponent(menuPanel);
-        
+        splitPane.setLeftComponent(menuPanel);
+
     }
 
     private void setPathToImage() {
@@ -89,7 +87,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     }
 
     private void insertSplashImage() {
-    	contentPanel.removeAll();
+        contentPanel.removeAll();
         contentPanel.revalidate();
         contentPanel.repaint();
         ImageIcon image = new ImageIcon(pathToImage);
@@ -98,14 +96,14 @@ public class LibrarySystem extends JFrame implements LibWindow {
     }
 
     public void openBookCheckoutWindow() {
-    	if (!(contentPanel instanceof BookCheckoutWindow)) {
+        if (!(contentPanel instanceof BookCheckoutWindow)) {
             contentPanel = new BookCheckoutWindow();
             splitPane.setRightComponent(contentPanel);
         }
     }
-    
+
     public void openListLibraryBookWindow() {
-    	if (!(contentPanel instanceof ListLibraryBookWindow)) {
+        if (!(contentPanel instanceof ListLibraryBookWindow)) {
             contentPanel = new ListLibraryBookWindow();
             splitPane.setRightComponent(contentPanel);
         }
@@ -126,7 +124,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     }
 
     public void openListLibraryMemberWindow() {
-    	if (!(contentPanel instanceof ListLibraryMemberWindow)) {
+        if (!(contentPanel instanceof ListLibraryMemberWindow)) {
             contentPanel = new ListLibraryMemberWindow();
             splitPane.setRightComponent(contentPanel);
         }
@@ -139,6 +137,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
     @Override
     public void isInitialized(boolean val) {
-    	isInitialized = val;
+        isInitialized = val;
     }
 }
