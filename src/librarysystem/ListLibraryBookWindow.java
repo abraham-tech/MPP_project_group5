@@ -8,8 +8,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -17,25 +15,14 @@ import java.util.Collection;
 import java.util.List;
 
 public class ListLibraryBookWindow extends JPanel implements LibWindow {
-    private JLabel lblIsbn;
     private JTextField txtIsbn;
-    private JLabel lblAvailability;
     private JTextField txtAvailability;
-    private JLabel lblTitle;
     private JTextField txtTitle;
-    private JButton btnClearSearch;
-    private JButton btnCopy;
-    private JPanel middlePanel;
-    private JFrame frame;
     private JTable table;
-    private ControllerInterface ci = new SystemController();
-    private JPanel panel_4;
-    private List<String> defaultList = new ArrayList<>();
-    private JList<String> mainList;
-    private JScrollPane mainScroll;
-    private DefaultListModel<String> listModel = new DefaultListModel<String>();
+    private final ControllerInterface ci = new SystemController();
+    private final List<String> defaultList = new ArrayList<>();
+    private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private JTextField searchField;
-    private JButton btnSearch;
     DefaultTableModel model;
 
     private int selectedRow = -1;
@@ -45,7 +32,7 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
     }
 
     private JList<String> createJList() {
-        JList<String> ret = new JList<String>(listModel);
+        JList<String> ret = new JList<>(listModel);
         ret.setVisibleRowCount(4);
         return ret;
     }
@@ -83,43 +70,43 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
         searchField = new JTextField();
         searchField.setSize(200, 24);
         panel_3.add(searchField);
-        btnSearch = new JButton("ISBN SEARCH");
+        JButton btnSearch = new JButton("ISBN SEARCH");
         panel_3.add(btnSearch);
 
-        btnClearSearch = new JButton("CLEAR SEARCH");
+        JButton btnClearSearch = new JButton("CLEAR SEARCH");
         panel_3.add(btnClearSearch);
 
-        btnCopy = new JButton("COPY");
+        JButton btnCopy = new JButton("COPY");
         panel_3.add(btnCopy);
 
-        middlePanel = new JPanel();
+        JPanel middlePanel = new JPanel();
         middlePanel.setBounds(5, 5, 460, 219);
         middlePanel.setLayout(new GridLayout(0, 2, 0, 0));
 
-        lblIsbn = new JLabel("ISBN:");
+        JLabel lblIsbn = new JLabel("ISBN:");
         middlePanel.add(lblIsbn);
 
         txtIsbn = new JTextField();
         middlePanel.add(txtIsbn);
         txtIsbn.setColumns(10);
 
-        lblTitle = new JLabel("Title:");
+        JLabel lblTitle = new JLabel("Title:");
         middlePanel.add(lblTitle);
 
         txtTitle = new JTextField();
         middlePanel.add(txtTitle);
         txtTitle.setColumns(10);
 
-        lblAvailability = new JLabel("Availability:");
+        JLabel lblAvailability = new JLabel("Availability:");
         middlePanel.add(lblAvailability);
 
         txtAvailability = new JTextField("");
         middlePanel.add(txtAvailability);
         txtAvailability.setColumns(10);
 
-        mainList = createJList();
+        JList<String> mainList = createJList();
         mainList.setFixedCellWidth(70);
-        mainScroll = new JScrollPane(mainList);
+        JScrollPane mainScroll = new JScrollPane(mainList);
 
         initializeDefaultList();
         panel_2.add(mainScroll);
@@ -128,7 +115,7 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
         panel_2.add(panel_3);
         panel_2.add(middlePanel);
 
-        panel_4 = new JPanel();
+        JPanel panel_4 = new JPanel();
         panel_4.setBounds(5, 282, 580, 275);
         panel_2.add(panel_4);
         panel_4.setLayout(new BorderLayout(0, 0));
@@ -138,8 +125,6 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-
-            ;
         };
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setModel(model);
@@ -167,27 +152,25 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
                 model.setValueAt(book.getCopies().length, selectedRow, 4);
 
                 clearText();
-                JOptionPane.showMessageDialog(frame, "Copy a book successfully.", "",
+                JOptionPane.showMessageDialog(this, "Copy a book successfully.", "",
                         JOptionPane.INFORMATION_MESSAGE);
                 table.clearSelection();
 
             } else if (count > 1) {
-                JOptionPane.showMessageDialog(frame, "Please select single a book.", "", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please select single a book.", "", JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(frame, "There is no book to copy", "", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "There is no book to copy", "", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        btnSearch.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String isbn = searchField.getText();
-                if (isbn.isEmpty()) {
-                    updateJtable();
-                } else {
-                    updateJtableByIsbn(isbn);
-                    if (table.getRowCount() > 0) {
-                        table.setRowSelectionInterval(0, 0);
-                    }
+        btnSearch.addActionListener(e -> {
+            String isbn = searchField.getText();
+            if (isbn.isEmpty()) {
+                updateJtable();
+            } else {
+                updateJtableByIsbn(isbn);
+                if (table.getRowCount() > 0) {
+                    table.setRowSelectionInterval(0, 0);
                 }
             }
         });
@@ -201,7 +184,7 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
                     Book book = ci.getBookByISBN((String) model.getValueAt(selectedRow, 0));
                     txtTitle.setText(book.getTitle());
                     txtIsbn.setText(book.getIsbn());
-                    txtAvailability.setText(book.getNumCopies() + "");
+                    txtAvailability.setText(String.valueOf(book.getNumCopies()));
                 } else {
                     clearText();
                 }

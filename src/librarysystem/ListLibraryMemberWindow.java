@@ -9,8 +9,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
@@ -29,11 +27,9 @@ public class ListLibraryMemberWindow extends JPanel implements LibWindow {
     private JTextField txtFieldId;
     private JTextField txtTelephone;
     private JButton btnAdd;
-    private JPanel middlePanel;
     private JFrame frame;
     private JTable table;
     ControllerInterface ci = new SystemController();
-    private JPanel panel_4;
     private int selectedRow = -1;
 
 
@@ -85,7 +81,7 @@ public class ListLibraryMemberWindow extends JPanel implements LibWindow {
         JButton btnUpdate = new JButton("Update");
         panel_3.add(btnUpdate);
 
-        middlePanel = new JPanel();
+        JPanel middlePanel = new JPanel();
         middlePanel.setBounds(5, 5, 460, 219);
         middlePanel.setLayout(new GridLayout(0, 2, 0, 0));
         JLabel lblMemberId = new JLabel("ID:");
@@ -147,7 +143,7 @@ public class ListLibraryMemberWindow extends JPanel implements LibWindow {
         panel_2.add(panel_3);
         panel_2.add(middlePanel);
 
-        panel_4 = new JPanel();
+        JPanel panel_4 = new JPanel();
         panel_4.setBounds(5, 282, 580, 275);
         panel_2.add(panel_4);
         panel_4.setLayout(new BorderLayout(0, 0));
@@ -158,8 +154,6 @@ public class ListLibraryMemberWindow extends JPanel implements LibWindow {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-
-            ;
         };
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setModel(model);
@@ -172,22 +166,20 @@ public class ListLibraryMemberWindow extends JPanel implements LibWindow {
         JScrollPane jScrollPane = new JScrollPane();
         jScrollPane.setViewportView(table);
         panel_4.add(jScrollPane);
-        btnDelete.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int count = table.getSelectedRowCount();
-                if (count == 1) {
-                    selectedRow = table.getSelectedRow();
+        btnDelete.addActionListener(e -> {
+            int count = table.getSelectedRowCount();
+            if (count == 1) {
+                selectedRow = table.getSelectedRow();
 
-                    String memberIdString = (String) table.getValueAt(selectedRow, 0);
-                    model.removeRow(selectedRow);
-                    ci.deleteMember(memberIdString);
-                    selectedRow = -1;
-                    clearText();
-                } else if (count > 1) {
-                    JOptionPane.showMessageDialog(frame, "Please select single row", "", ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(frame, "There is no row to delete", "", ERROR_MESSAGE);
-                }
+                String memberIdString = (String) table.getValueAt(selectedRow, 0);
+                model.removeRow(selectedRow);
+                ci.deleteMember(memberIdString);
+                selectedRow = -1;
+                clearText();
+            } else if (count > 1) {
+                JOptionPane.showMessageDialog(frame, "Please select single row", "", ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "There is no row to delete", "", ERROR_MESSAGE);
             }
         });
 
