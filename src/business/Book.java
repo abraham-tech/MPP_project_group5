@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -67,7 +66,7 @@ final public class Book implements Serializable {
 			return false;
 		}
 		return Arrays.stream(copies)
-				.map(l -> l.isAvailable())
+				.map(BookCopy::isAvailable)
 				.reduce(false, (x, y) -> x || y);
 	}
 
@@ -97,9 +96,10 @@ final public class Book implements Serializable {
 	}
 
 	public BookCopy getNextAvailableCopy() {
-		Optional<BookCopy> optional = Arrays.stream(copies)
-				.filter(x -> x.isAvailable()).findFirst();
-		return optional.isPresent() ? optional.get() : null;
+		return Arrays.stream(copies)
+				.filter(BookCopy::isAvailable)
+				.findFirst()
+				.orElse(null);
 	}
 
 	public BookCopy getCopy(int copyNum) {

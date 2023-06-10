@@ -4,28 +4,29 @@ import java.util.Collection;
 import java.util.List;
 
 public interface ControllerInterface {
-	public void login(String id, String password) throws LoginException;
+	void login(String id, String password) throws LoginException;
 
 	void checkBook(String memberId, String isbn) throws LibrarySystemException;
 
-	public List<String> allMemberIds();
+	List<String> allMemberIds();
 
-	public List<String> allBookIds();
+	List<String> allBookIds();
 
-	public void saveMember(LibraryMember member);
+	void saveMember(LibraryMember member);
 
-	public Collection<LibraryMember> alLibraryMembers();
+	Collection<LibraryMember> alLibraryMembers();
 
-	public void deleteMember(String memberId);
+	void deleteMember(String memberId);
 
-	public LibraryMember getLibraryMemberById(String memberId);
+	LibraryMember getLibraryMemberById(String memberId);
 
-	public Collection<Book> allBooks();
+	Collection<Book> allBooks();
 
 	List<CheckoutHistory> getCheckoutHistory();
 
-	public Book getBookByISBN(String isbn);
+	Book getBookByISBN(String isbn);
 
-	public void saveBook(Book book);
+	void saveBook(Book book);
 
+	LibraryMember findMemberById(String memberId);
 }

@@ -1,20 +1,11 @@
 package librarysystem;
 
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JOptionPane;
-
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.User;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.Map;
 
 

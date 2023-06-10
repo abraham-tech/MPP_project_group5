@@ -5,6 +5,7 @@ import business.SystemController;
 import dataaccess.User;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class LibrarySystem extends JFrame implements LibWindow {
@@ -45,10 +46,15 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	menuPanel = new JPanel();
     	menuPanel.setLayout(new GridLayout(15, 1));
         menuPanel.setBackground(Color.LIGHT_GRAY);
+        menuPanel.setBorder(new EmptyBorder(15, 30, 10, 30));
+
+
     	contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(1, 1));
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
-        splitPane.setDividerLocation(100);
+        splitPane.setDividerLocation(200);
+        splitPane.setEnabled(false);
+        splitPane.setDividerSize(0);
         getContentPane().add(splitPane);
     }
 
@@ -104,7 +110,21 @@ public class LibrarySystem extends JFrame implements LibWindow {
             splitPane.setRightComponent(contentPanel);
         }
     }
-    
+
+    public void openSearchMemberWindow() {
+        if (!(contentPanel instanceof SearchMemberWindow)) {
+            contentPanel = new SearchMemberWindow();
+            splitPane.setRightComponent(contentPanel);
+        }
+    }
+
+    public void openSearchBookWindow() {
+        if (!(contentPanel instanceof SearchBookWindow)) {
+            contentPanel = new SearchBookWindow();
+            splitPane.setRightComponent(contentPanel);
+        }
+    }
+
     public void openListLibraryMemberWindow() {
     	if (!(contentPanel instanceof ListLibraryMemberWindow)) {
             contentPanel = new ListLibraryMemberWindow();
@@ -121,5 +141,4 @@ public class LibrarySystem extends JFrame implements LibWindow {
     public void isInitialized(boolean val) {
     	isInitialized = val;
     }
-
 }
