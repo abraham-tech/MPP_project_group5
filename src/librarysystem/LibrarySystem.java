@@ -2,17 +2,11 @@ package librarysystem;
 
 import business.ControllerInterface;
 import business.SystemController;
-import dataaccess.Auth;
-import dataaccess.DataAccess;
-import dataaccess.DataAccessFacade;
 import dataaccess.User;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Map;
 
 public class LibrarySystem extends JFrame implements LibWindow {
     ControllerInterface ci = new SystemController();
@@ -22,14 +16,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     JPanel contentPanel;
     JSeparator separator;
     String pathToImage;
-    JTextField username;
-    JTextField password;
     JSplitPane splitPane;
-    JButton booksButton;
-    JButton usersButton;
-    JButton logoutButton;
-    JButton checkoutButton;
-    JButton searchMemberButton;
 
     private User loggedInUser;
 
@@ -46,6 +33,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     private static LibWindow[] allWindows = {
             LibrarySystem.INSTANCE,
             LoginWindow.INSTANCE,
+            MenuWindow.INSTANCE,
     };
 
     public static void hideAllWindows() {
@@ -55,30 +43,41 @@ public class LibrarySystem extends JFrame implements LibWindow {
     }
 
     private LibrarySystem() {
+    	menuPanel = new JPanel();
+    	menuPanel.setLayout(new GridLayout(15, 1));
+        menuPanel.setBackground(Color.LIGHT_GRAY);
+        menuPanel.setBorder(new EmptyBorder(15, 30, 10, 30));
+
+
+    	contentPanel = new JPanel();
+        contentPanel.setLayout(new GridLayout(1, 1));
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
+        splitPane.setDividerLocation(200);
+        splitPane.setEnabled(false);
+        splitPane.setDividerSize(0);
+        getContentPane().add(splitPane);
     }
 
     public void init() {
         formatContentPane();
         setPathToImage();
         insertSplashImage();
-
-        initLoginForm();
-        setSize(800, 500);
-        this.isInitialized(true);
+        setSize(810, 700);
+        isInitialized(true);
     }
 
     private void formatContentPane() {
-        menuPanel = new JPanel();
+    	if(loggedInUser == null) {
+    		menuPanel = LoginWindow.INSTANCE;
+    	}
+    	else {
+    		MenuWindow.INSTANCE.setAuth(loggedInUser.getAuthorization());
+    		menuPanel = MenuWindow.INSTANCE;
+    	}
         menuPanel.setLayout(new GridLayout(15, 1));
         menuPanel.setBackground(Color.LIGHT_GRAY);
-        menuPanel.setBorder(new EmptyBorder(15, 10, 10, 10));
-
-        contentPanel = new JPanel();
-        contentPanel.setLayout(new GridLayout(1, 1));
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, contentPanel);
-        splitPane.setDividerLocation(200);
-        splitPane.setDividerSize(0);
-        getContentPane().add(splitPane);
+		splitPane.setLeftComponent(menuPanel);
+        
     }
 
     private void setPathToImage() {
@@ -90,175 +89,43 @@ public class LibrarySystem extends JFrame implements LibWindow {
     }
 
     private void insertSplashImage() {
-        ImageIcon image = new ImageIcon(pathToImage);
-        contentPanel.add(new JLabel(image));
-    }
-
-    public void initLoginForm() {
-        clearMenu();
-        JLabel loginLabel = new JLabel("Sign In:");
-        getContentPane().add(splitPane);
-        Util.adjustLabelFont(loginLabel, Color.BLUE.darker(), true);
-        menuPanel.add(loginLabel);
-        JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
-        username = new JTextField(45);
-        username.setMaximumSize(username.getPreferredSize());
-        JLabel uLabel = new JLabel("Username:");
-        uLabel.setFont(Util.makeSmallFont(uLabel.getFont()));
-        menuPanel.add(uLabel);
-        menuPanel.add(username);
-        password = new JPasswordField(45);
-        password.setMaximumSize(password.getPreferredSize());
-        JLabel pLabel = new JLabel("Password:");
-        pLabel.setFont(Util.makeSmallFont(pLabel.getFont()));
-        menuPanel.add(pLabel);
-        menuPanel.add(password);
-        JButton loginButton = new JButton("Sign In");
-        addLoginButtonListener(loginButton);
-        menuPanel.add(loginButton);
-        menuPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
-    }
-
-    private void clearMenu() {
-        menuPanel.removeAll();
-        menuPanel.revalidate();
-        menuPanel.repaint();
-    }
-
-    private void clearContentPanel() {
-        contentPanel.removeAll();
+    	contentPanel.removeAll();
         contentPanel.revalidate();
         contentPanel.repaint();
+        ImageIcon image = new ImageIcon(pathToImage);
+        contentPanel.add(new JLabel(image));
+        contentPanel.setBackground(Color.WHITE);
     }
 
-    public void initAdminMenu() {
-        clearMenu();
-        booksButton = new JButton("Books");
-        usersButton = new JButton("Users");
-        menuPanel.add(booksButton);
-        menuPanel.add(usersButton);
-        addLogoutButton();
-    }
-
-    public void initLibrarianMenu() {
-        clearMenu();
-        checkoutButton = new JButton("Checkout");
-        checkoutButton.addActionListener(e -> openBookCheckoutWindow());
-        menuPanel.add(checkoutButton);
-
-        searchMemberButton = new JButton("Search Member");
-        searchMemberButton.addActionListener(e -> openSearchMemberWindow());
-        menuPanel.add(searchMemberButton);
-
-        addLogoutButton();
-    }
-
-    public void initBothMenu() {
-        clearMenu();
-        booksButton = new JButton("Books");
-        usersButton = new JButton("Members");
-        checkoutButton = new JButton("Checkout");
-        checkoutButton.addActionListener(e -> openBookCheckoutWindow());
-        menuPanel.add(booksButton);
-        menuPanel.add(usersButton);
-        menuPanel.add(checkoutButton);
-
-        addLogoutButton();
-    }
-
-    private void openBookCheckoutWindow() {
-        if (!(contentPanel instanceof BookCheckoutWindow)) {
+    public void openBookCheckoutWindow() {
+    	if (!(contentPanel instanceof BookCheckoutWindow)) {
             contentPanel = new BookCheckoutWindow();
             splitPane.setRightComponent(contentPanel);
         }
     }
-
-    private void openSearchMemberWindow() {
-        if (!(contentPanel instanceof SearchMemberWindow)) {
-            contentPanel = new SearchMemberWindow();
+    
+    public void openListLibraryBookWindow() {
+    	if (!(contentPanel instanceof ListLibraryBookWindow)) {
+            contentPanel = new ListLibraryBookWindow();
+            splitPane.setRightComponent(contentPanel);
+        }
+    }
+    
+    public void openListLibraryMemberWindow() {
+    	if (!(contentPanel instanceof ListLibraryMemberWindow)) {
+            contentPanel = new ListLibraryMemberWindow();
             splitPane.setRightComponent(contentPanel);
         }
     }
 
-    private void addLogoutButton() {
-        logoutButton = new JButton("Sign Out");
-        logoutButton.addActionListener(new LogoutListener());
-        JSeparator s = new JSeparator();
-        s.setOrientation(SwingConstants.HORIZONTAL);
-        menuPanel.add(s);
-        menuPanel.add(logoutButton);
-    }
-
-    private void addLoginButtonListener(JButton butn) {
-        butn.addActionListener(evt -> {
-            String userId = username.getText();
-            String userPass = password.getText();
-            if (userId == null || userId.isBlank() || userPass == null || userPass.isBlank()) {
-                JOptionPane.showMessageDialog(this, "Invalid username or password", "", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            DataAccess da = new DataAccessFacade();
-            Map<String, User> users = da.readUserMap();
-            if (!users.containsKey(userId)) {
-                JOptionPane.showMessageDialog(this, "Invalid username", "", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            User user = users.get(userId);
-            if (!userPass.equals(user.getPassword())) {
-                JOptionPane.showMessageDialog(this, "Invalid password", "", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            LibrarySystem.INSTANCE.setLoggedInUser(user);
-            if (user.getAuthorization() == Auth.ADMIN) {
-                initAdminMenu();
-            } else if (user.getAuthorization() == Auth.LIBRARIAN) {
-                initLibrarianMenu();
-            } else if (user.getAuthorization() == Auth.BOTH) {
-                initBothMenu();
-            }
-            if (usersButton != null) {
-                usersButton.addActionListener((evt1) -> {
-                    if (!(contentPanel instanceof ListLibraryMemberWindow)) {
-                        contentPanel = new ListLibraryMemberWindow();
-                        splitPane.setRightComponent(contentPanel);
-                    }
-                });
-            }
-            if (booksButton != null) {
-                booksButton.addActionListener((evt1) -> {
-                    if (!(contentPanel instanceof ListLibraryBookWindow)) {
-                        contentPanel = new ListLibraryBookWindow();
-                        splitPane.setRightComponent(contentPanel);
-                    }
-                    // contentPanel = new JPanel();
-                    // insertSplashImage();
-                    // splitPane.setRightComponent(contentPanel);
-                });
-            }
-        });
-    }
-
-    class LogoutListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            loggedInUser = null;
-            clearMenu();
-            clearContentPanel();
-            insertSplashImage();
-            initLoginForm();
-        }
-
-    }
-
     @Override
     public boolean isInitialized() {
-        return this.isInitialized;
+        return isInitialized;
     }
 
     @Override
     public void isInitialized(boolean val) {
-        this.isInitialized = val;
+    	isInitialized = val;
     }
+
 }
