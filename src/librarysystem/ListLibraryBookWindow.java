@@ -91,7 +91,7 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 
 		JPanel panel_3 = new JPanel();
 		panel_3.setLayout(new GridLayout(0, 6, 0, 0));
-		panel_3.setBounds(5, 231, 600, 39);
+		panel_3.setBounds(5, 231, 700, 39);
 
 		searchField = new JTextField();
 		searchField.setSize(200, 24);
