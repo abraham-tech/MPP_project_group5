@@ -149,7 +149,10 @@ public class SearchBookWindow extends JPanel implements LibWindow {
             });
         });
 
-        btnClearSearch.addActionListener((evt) -> clearText());
+        btnClearSearch.addActionListener((evt) -> {
+            clearText();
+            model.setRowCount(0);
+        });
     }
 
     void clearText() {
