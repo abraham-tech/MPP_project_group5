@@ -37,7 +37,7 @@ final public class CheckoutRecordEntry implements Serializable {
     }
 
     public boolean isOverdue() {
-        return now().isAfter(dueDate);
+        return now().isAfter(dueDate) && !copy.isAvailable();
     }
 
     @Override

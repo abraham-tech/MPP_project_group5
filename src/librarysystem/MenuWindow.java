@@ -24,6 +24,7 @@ public class MenuWindow extends JPanel implements LibWindow {
             add(getListBooksButton());
             add(getUserListButton());
             add(getCheckoutButton());
+            add(getSearchBookButton());
         }
 
         JSeparator separator = new JSeparator();
@@ -64,6 +65,12 @@ public class MenuWindow extends JPanel implements LibWindow {
     private static JButton getSearchMemberButton() {
         JButton booksButton = new JButton("Search Member");
         booksButton.addActionListener(e -> LibrarySystem.INSTANCE.openSearchMemberWindow());
+        return booksButton;
+    }
+
+    private static JButton getSearchBookButton() {
+        JButton booksButton = new JButton("Search Book");
+        booksButton.addActionListener(e -> LibrarySystem.INSTANCE.openSearchBookWindow());
         return booksButton;
     }
 

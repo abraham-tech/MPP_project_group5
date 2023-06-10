@@ -117,7 +117,14 @@ public class LibrarySystem extends JFrame implements LibWindow {
             splitPane.setRightComponent(contentPanel);
         }
     }
-    
+
+    public void openSearchBookWindow() {
+        if (!(contentPanel instanceof SearchBookWindow)) {
+            contentPanel = new SearchBookWindow();
+            splitPane.setRightComponent(contentPanel);
+        }
+    }
+
     public void openListLibraryMemberWindow() {
     	if (!(contentPanel instanceof ListLibraryMemberWindow)) {
             contentPanel = new ListLibraryMemberWindow();
