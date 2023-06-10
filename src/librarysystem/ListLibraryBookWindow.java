@@ -19,7 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -37,8 +36,7 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 	private JTextField txtAvailability;
 	private JLabel lblTitle;
 	private JTextField txtTitle;
-	private JLabel lblAuthors;
-	private JButton btnAdd;
+	private JButton btnClearSearch;
 	private JButton btnCopy;
 	private JPanel middlePanel;
 	private JFrame frame;
@@ -49,7 +47,6 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 	private JList<String> mainList;
 	private JScrollPane mainScroll;
 	private DefaultListModel<String> listModel = new DefaultListModel<String>();
-	private JButton removeSelectedButton, addItemButton;
 	private JTextField searchField;
 	private JButton btnSearch;
 	DefaultTableModel model;
@@ -96,25 +93,17 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 		panel_3.setLayout(new GridLayout(0, 6, 0, 0));
 		panel_3.setBounds(5, 231, 600, 39);
 
-		
 		searchField = new JTextField();
 		searchField.setSize(200, 24);
 		panel_3.add(searchField);
 		btnSearch = new JButton("SEARCH");
 		panel_3.add(btnSearch);
-		
-		
-		btnAdd = new JButton("ADD");
-		panel_3.add(btnAdd);
+
+		btnClearSearch = new JButton("CLEAR SEARCH");
+		panel_3.add(btnClearSearch);
 
 		btnCopy = new JButton("COPY");
 		panel_3.add(btnCopy);
-
-		JButton btnDelete = new JButton("DELETE");
-		panel_3.add(btnDelete);
-
-		JButton btnUpdate = new JButton("UPDATE");
-		panel_3.add(btnUpdate);
 
 		middlePanel = new JPanel();
 		middlePanel.setBounds(5, 5, 460, 219);
@@ -141,8 +130,6 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 		middlePanel.add(txtAvailability);
 		txtAvailability.setColumns(10);
 
-		// middlePanel = new JPanel();
-		// middlePanel.setLayout(new BorderLayout());
 		mainList = createJList();
 		mainList.setFixedCellWidth(70);
 		mainScroll = new JScrollPane(mainList);
@@ -178,24 +165,6 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 		jScrollPane.setViewportView(table);
 		panel_4.add(jScrollPane);
 
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int count = table.getSelectedRowCount();
-				if (count == 1) {
-					selectedRow = table.getSelectedRow();
-					String memberavailability = (String) table.getValueAt(selectedRow, 0);
-					model.removeRow(selectedRow);
-					ci.deleteMember(memberavailability);
-					selectedRow = -1;
-					clearText();
-				} else if (count > 1) {
-					JOptionPane.showMessageDialog(frame, "Please select single row", "", JOptionPane.ERROR_MESSAGE);
-				} else {
-					JOptionPane.showMessageDialog(frame, "There is no row to delete", "", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
-
 		btnCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int count = table.getSelectedRowCount();
@@ -221,15 +190,18 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 				}
 			}
 		});
-		
+
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					String isbn = searchField.getText();
-					if (isbn.isEmpty()) {
-						updateJtable();
-					} else {
-						updateJtableByIsbn(isbn);
+				String isbn = searchField.getText();
+				if (isbn.isEmpty()) {
+					updateJtable();
+				} else {
+					updateJtableByIsbn(isbn);
+					if (table.getRowCount() > 0) {
+						table.setRowSelectionInterval(0, 0);
 					}
+				}
 			}
 		});
 
@@ -250,28 +222,9 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 			}
 		});
 
-		btnAdd.addActionListener((evt) -> {
-			String availability = txtAvailability.getText();
-			String isbn = txtIsbn.getText();
-			String title = txtTitle.getText() == null ? "N/A" : txtTitle.getText();
-			if (isbn.isEmpty() || availability.isEmpty() || title.isEmpty()) {
-				JOptionPane.showMessageDialog(frame, "Invalid isbn or title or availability", "",
-						JOptionPane.ERROR_MESSAGE);
-				System.out.println("Invalid isbn or title or availability");
-				return;
-			}
-			List<String> memberStrings = ci.allMemberIds();
-			if (memberStrings.contains(availability)) {
-				JOptionPane.showMessageDialog(frame, "Book exists", "", JOptionPane.ERROR_MESSAGE);
-				System.out.println("Book exists");
-				return;
-			}
-		});
-
-		btnUpdate.addActionListener((evt) -> {
-			String availability = txtAvailability.getText();
-			String isbn = txtIsbn.getText();
-			String title = txtTitle.getText() == null ? "N/A" : txtTitle.getText();
+		btnClearSearch.addActionListener((evt) -> {
+			searchField.setText("");
+			updateJtable();
 		});
 	}
 
@@ -280,7 +233,7 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 		txtIsbn.setText("");
 		txtAvailability.setText("");
 	}
-	
+
 	void updateJtable() {
 		model.setRowCount(0);
 		Collection<Book> books = ci.allBooks();
@@ -290,12 +243,12 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
 			model.addRow(objects);
 		}
 	}
-	
+
 	void updateJtableByIsbn(String isbn) {
 		model.setRowCount(0);
 		Collection<Book> books = ci.allBooks();
 		for (Book book : books) {
-			if (book.getIsbn().equals(isbn) ) {
+			if (book.getIsbn().equals(isbn)) {
 				Object[] objects = { book.getIsbn(), book.getTitle(), book.getMaxCheckoutLength(),
 						book.getAvailableBooksLength(), book.getCopies().length, book.getAuthors().toString() };
 				model.addRow(objects);
