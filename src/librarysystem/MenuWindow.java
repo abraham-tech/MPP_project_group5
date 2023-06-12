@@ -79,7 +79,7 @@ public class MenuWindow extends JPanel implements LibWindow {
     }
 
     private static JButton getAddBookNewButton() {
-        JButton booksButton = new JButton("Add Book");
+        JButton booksButton = new JButton("Add New Book");
         booksButton.addActionListener(e -> LibrarySystem.INSTANCE.openAddNewBookWindow());
         return booksButton;
     }
