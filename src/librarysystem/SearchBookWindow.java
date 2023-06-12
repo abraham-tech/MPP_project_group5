@@ -54,13 +54,11 @@ public class SearchBookWindow extends JPanel implements LibWindow {
         panel_3.setLayout(new GridLayout(0, 6, 0, 0));
         panel_3.setBounds(5, 5, 800, 39);
 
-
         JLabel searchLabel = new JLabel("Book ISBN:");
         panel_3.add(searchLabel);
         searchField = new JTextField();
         searchField.setSize(200, 24);
         panel_3.add(searchField);
-
 
         JButton btnSearch = new JButton("SEARCH");
         panel_3.add(btnSearch);
@@ -92,35 +90,35 @@ public class SearchBookWindow extends JPanel implements LibWindow {
             ;
         };
 
-        Object[] columnsObjects = {"ISBN", "TITLE", "Copy #", "OVERDUE", "DUE DATE", "MEMBER"};
+        Object[] columnsObjects = { "ISBN", "TITLE", "Copy #", "OVERDUE", "DUE DATE", "MEMBER" };
         model = new DefaultTableModel();
         model.setColumnIdentifiers(columnsObjects);
-//		updateJtable();
 
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setModel(model);
-		TableColumnModel colModel = table.getColumnModel();
-		colModel.getColumn(5).setPreferredWidth(200);
-		colModel.getColumn(4).setPreferredWidth(100);
-		colModel.getColumn(3).setPreferredWidth(75);
-		colModel.getColumn(2).setPreferredWidth(50);
-		colModel.getColumn(1).setPreferredWidth(150);
-		colModel.getColumn(0).setPreferredWidth(75);
+        TableColumnModel colModel = table.getColumnModel();
+        colModel.getColumn(5).setPreferredWidth(200);
+        colModel.getColumn(4).setPreferredWidth(100);
+        colModel.getColumn(3).setPreferredWidth(75);
+        colModel.getColumn(2).setPreferredWidth(50);
+        colModel.getColumn(1).setPreferredWidth(150);
+        colModel.getColumn(0).setPreferredWidth(75);
         JScrollPane jScrollPane = new JScrollPane();
         jScrollPane.setViewportView(table);
         panel_4.add(jScrollPane);
 
         btnSearch.addActionListener(event -> {
             String isbn = searchField.getText();
-			if (isbn.isEmpty()) {
+            if (isbn.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Enter book ISBN", "", ERROR_MESSAGE);
                 System.out.println("exist member id");
                 return;
-			}
+            }
 
             Book theBook = ci.getBookByIsbn(isbn);
             if (theBook == null) {
-                JOptionPane.showMessageDialog(this, "Book with ISBN " + isbn + " could not be found", "", ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Book with ISBN " + isbn + " could not be found", "",
+                        ERROR_MESSAGE);
                 return;
             }
 
@@ -135,8 +133,8 @@ public class SearchBookWindow extends JPanel implements LibWindow {
             records.forEach(record -> {
                 record.getEntries().forEach(entry -> {
                     Book book = entry.getCopy().getBook();
-                    if (isbn.equalsIgnoreCase(book.getIsbn())) {
-                        model.addRow(new Object[]{
+                    if (entry.isOverdue() && isbn.equalsIgnoreCase(book.getIsbn())) {
+                        model.addRow(new Object[] {
                                 book.getIsbn(),
                                 book.getTitle(),
                                 entry.getCopy().getCopyNum(),
