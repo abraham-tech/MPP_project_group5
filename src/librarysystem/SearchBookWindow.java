@@ -118,7 +118,7 @@ public class SearchBookWindow extends JPanel implements LibWindow {
                 return;
 			}
 
-            Book theBook = ci.getBookByISBN(isbn);
+            Book theBook = ci.getBookByIsbn(isbn);
             if (theBook == null) {
                 JOptionPane.showMessageDialog(this, "Book with ISBN " + isbn + " could not be found", "", ERROR_MESSAGE);
                 return;

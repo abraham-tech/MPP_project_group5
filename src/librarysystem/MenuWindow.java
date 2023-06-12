@@ -17,6 +17,7 @@ public class MenuWindow extends JPanel implements LibWindow {
         if (role == Auth.ADMIN) {
             add(getListBooksButton());
             add(getUserListButton());
+            add(getAddBookNewButton());
         } else if (role == Auth.LIBRARIAN) {
             add(getCheckoutButton());
             add(getSearchMemberButton());
@@ -26,6 +27,7 @@ public class MenuWindow extends JPanel implements LibWindow {
             add(getCheckoutButton());
             add(getSearchBookButton());
             add(getSearchMemberButton());
+            add(getAddBookNewButton());
         }
 
         JSeparator separator = new JSeparator();
@@ -72,6 +74,12 @@ public class MenuWindow extends JPanel implements LibWindow {
     private static JButton getSearchBookButton() {
         JButton booksButton = new JButton("Search Book");
         booksButton.addActionListener(e -> LibrarySystem.INSTANCE.openSearchBookWindow());
+        return booksButton;
+    }
+
+    private static JButton getAddBookNewButton() {
+        JButton booksButton = new JButton("Add Book");
+        booksButton.addActionListener(e -> LibrarySystem.INSTANCE.openAddNewBookWindow());
         return booksButton;
     }
 

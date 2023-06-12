@@ -24,7 +24,7 @@ public interface ControllerInterface {
 
 	List<CheckoutHistory> getCheckoutHistory();
 
-	Book getBookByISBN(String isbn);
+	Book getBookByIsbn(String isbn);
 
 	void saveBook(Book book);
 
