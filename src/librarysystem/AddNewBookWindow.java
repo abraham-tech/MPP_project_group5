@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 
 public class AddNewBookWindow extends JPanel implements LibWindow {
     private JTextField bookTitleField;
@@ -218,6 +219,9 @@ public class AddNewBookWindow extends JPanel implements LibWindow {
 
             updateJtable();
             clearText();
+
+            JOptionPane.showMessageDialog(this, "Book successfully added", "", INFORMATION_MESSAGE,
+                    new ImageIcon(System.getProperty("user.dir") + "/src/librarysystem/success.png"));
         });
 
         table.addMouseListener(new MouseAdapter() {
