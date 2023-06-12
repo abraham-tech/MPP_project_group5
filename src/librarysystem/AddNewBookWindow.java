@@ -18,24 +18,15 @@ import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 
 public class AddNewBookWindow extends JPanel implements LibWindow {
     private JTextField bookTitleField;
-    private JTextField txtState;
-    private JTextField txtZip;
     private JTextField maxCheckoutLengthField;
-    private JTextField txtCity;
     private JTextField noOfCopiesField;
     private JTextField bookIsbnField;
     private JList<String> jAllAuthors;
     private JList<String> jSelectedAuthors;
-    private JButton copyButton;
-
-    private JTextField txtIsbn;
-    private JTextField txtAvailability;
-    private JTextField txtTitle;
     private JTable table;
     private final ControllerInterface ci = new SystemController();
     private final List<String> defaultList = new ArrayList<>();
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
-    private JTextField searchField;
     DefaultTableModel model;
 
     private int selectedRow = -1;
@@ -129,7 +120,7 @@ public class AddNewBookWindow extends JPanel implements LibWindow {
         middlePanel.add(new JScrollPane(jAllAuthors));
 
 //        middlePanel.add(new JLabel(""));
-        copyButton = new JButton(">>>");
+        JButton copyButton = new JButton(">>>");
 
         copyButton.addActionListener(e -> {
             int[] selectedIndices = jAllAuthors.getSelectedIndices();
@@ -267,23 +258,6 @@ public class AddNewBookWindow extends JPanel implements LibWindow {
                     book.getCopies().length,
                     book.getAuthors().stream().map(Author::getFullName).collect(Collectors.joining(", "))
             });
-        }
-    }
-
-    void updateJtableByIsbn(String isbn) {
-        model.setRowCount(0);
-        Collection<Book> books = ci.allBooks();
-        for (Book book : books) {
-            if (book.getIsbn().equals(isbn)) {
-                model.addRow(new Object[]{
-                        book.getIsbn(), book.getTitle(),
-                        book.getMaxCheckoutLength(),
-                        book.getAvailableBooksLength(),
-                        book.getCopies().length,
-                        book.getAuthors().stream().map(Author::getFullName).collect(Collectors.joining(", "))
-                });
-                break;
-            }
         }
     }
 
