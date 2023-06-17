@@ -36,7 +36,7 @@ public class SystemController implements ControllerInterface {
                 .orElseThrow(() -> new LibrarySystemException("Member id ID: " + memberId + " not found."));
 
         //search book from storage using ISBN
-        Book book = getBookByISBN(isbn);
+        Book book = getBookByIsbn(isbn);
         if (book == null) {
             throw new LibrarySystemException("Book with ISBN: " + isbn + " not found.");
         }
@@ -123,7 +123,7 @@ public class SystemController implements ControllerInterface {
     }
 
     @Override
-    public Book getBookByISBN(String isbn) {
+    public Book getBookByIsbn(String isbn) {
         return da.findBookByIsbn(isbn).orElse(null);
     }
 

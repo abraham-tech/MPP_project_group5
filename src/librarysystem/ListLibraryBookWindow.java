@@ -144,7 +144,7 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
             if (count == 1) {
                 selectedRow = table.getSelectedRow();
                 String isbn = (String) table.getValueAt(selectedRow, 0);
-                Book book = ci.getBookByISBN(isbn);
+                Book book = ci.getBookByIsbn(isbn);
                 book.addCopy();
                 ci.saveBook(book);
 
@@ -181,7 +181,7 @@ public class ListLibraryBookWindow extends JPanel implements LibWindow {
                 int count = table.getSelectedRowCount();
                 if (count == 1) {
                     selectedRow = table.getSelectedRow();
-                    Book book = ci.getBookByISBN((String) model.getValueAt(selectedRow, 0));
+                    Book book = ci.getBookByIsbn((String) model.getValueAt(selectedRow, 0));
                     txtTitle.setText(book.getTitle());
                     txtIsbn.setText(book.getIsbn());
                     txtAvailability.setText(String.valueOf(book.getNumCopies()));
